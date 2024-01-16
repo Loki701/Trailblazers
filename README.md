@@ -1,8 +1,9 @@
 # Trailblazers
-<div>
+<div align="center">
     <img src="./banner.jpg" alt="Banner"/>
 </div>
 
+## Table of Contents
 - [Introduction](#introduction)
 - [Development Status](#development-status)
 - [Installation](#installation)
