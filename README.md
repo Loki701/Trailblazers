@@ -1,7 +1,5 @@
-<div align="center" font-size="10rem">
-Trailblazers
-</div>
 <div align="center">
+    <h1>Trailblazers</h1>
     <img src="./banner.jpg" alt="Banner"/>
 </div>
 
