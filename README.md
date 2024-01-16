@@ -1,5 +1,9 @@
-# Trailblazers
+<div align="center">
+    <h1>Trailblazers</h1>
+    <img src="./banner.jpg" alt="Banner"/>
+</div>
 
+## Table of Contents
 - [Introduction](#introduction)
 - [Development Status](#development-status)
 - [Installation](#installation)
