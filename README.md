@@ -1,5 +1,7 @@
-<div align="center" display="flex" flex-align="column">
-    # Trailblazers
+<div align="center">
+# Trailblazers
+</div>
+<div align="center">
     <img src="./banner.jpg" alt="Banner"/>
 </div>
 
