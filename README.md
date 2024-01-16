@@ -1,4 +1,7 @@
 # Trailblazers
+<div>
+    <img src="./banner.jpg" alt="Banner"/>
+</div>
 
 - [Introduction](#introduction)
 - [Development Status](#development-status)
