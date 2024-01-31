@@ -24,24 +24,28 @@ public class PathfindingService {
             for (int j = 0; j < maze[0].length; j++) {
                 if (maze[i][j] == START.getValue()) {
                     startCount++;
-                    if (startCount > 1) { // A valid maze has only one start cell.
-                        return false;
+                    if (startCount == 1) {
+                        start = new Cell(i,j);
                     }
-                    start = new Cell(i,j);
+                    else {
+                        return false; // A valid maze has at most one start.
+                    }
                 }
                 else if (maze[i][j] == FINISH.getValue()) {
                     finishCount++;
-                    if (finishCount > 1) { // A valid maze has only one finish cell.
-                        return false;
+                    if (finishCount == 1) {
+                        finish = new Cell(i,j);
                     }
-                    finish = new Cell(i,j);
+                    else {
+                        return false; // A valid maze has at most one finish.
+                    }
                 }
                 else if (maze[i][j] != EMPTY.getValue() && maze[i][j] != WALL.getValue()) {
                     return false; // A valid maze contains only 0, 1, 2, or 3.
                 }
             }
         }
-        return true;
+        return startCount == 1 && finishCount == 1; // A valid maze has at least one start and at least one finish.
     }
 
     // Given a valid maze, find a path from start to finish using Breadth First Search.
