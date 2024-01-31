@@ -1,8 +1,13 @@
-// Home.js
-import React from 'react';
+// import React, { useState, useEffect } from "react";
+import Table from './visualizer/Table';
 
-function Home() {
-  return <h1>Home Page</h1>;
-}
+const Home = () => {
+
+  return (
+    <div className='grid'>
+      <Table />
+    </div>
+  );
+};
 
 export default Home;
