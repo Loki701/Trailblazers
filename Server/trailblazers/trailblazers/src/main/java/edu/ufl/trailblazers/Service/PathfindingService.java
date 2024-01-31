@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 import static edu.ufl.trailblazers.Model.CellType.*;
 
@@ -90,6 +91,49 @@ public class PathfindingService {
         }
 
         // If bfsQ is empty and end isn't reached, maze can't be finished.
+        return new TraversalResult(false, visitOrder);
+    }
+
+    // Given a valid maze, find a path from start to finish using Depth First Search. Same logic as BFS, but with a
+    // stack instead of a queue.
+    public static TraversalResult traverseDfs(int[][] maze) {
+        int rowCount = maze.length;
+        int colCount = maze[0].length;
+
+        int[] rowDirections = {-1, 0, 1, 0};
+        int[] colDirections = {0, 1, 0, -1};
+
+        boolean[][] dfsVisited = new boolean[rowCount][colCount];
+        Stack<Cell> dfsStk = new Stack<>();
+        Queue<Cell> visitOrder = new LinkedList<>();
+
+        dfsVisited[start.row()][start.col()] = true;
+        dfsStk.push(start);
+        visitOrder.add(start);
+
+        while (!dfsStk.isEmpty()) {
+            Cell curr = dfsStk.pop();
+
+            for (int i = 0; i < 4; i++) {
+                int newRow = curr.row() + rowDirections[i];
+                int newCol = curr.col() + colDirections[i];
+
+                if (newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount) {
+                    if (maze[newRow][newCol] != WALL.getValue() && !dfsVisited[newRow][newCol]) {
+                        Cell unvisitedNeighbor = new Cell(newRow, newCol);
+                        visitOrder.add(unvisitedNeighbor);
+
+                        if (newRow == finish.row() && newCol == finish.col()) {
+                            return new TraversalResult(true, visitOrder);
+                        }
+
+                        dfsVisited[newRow][newCol] = true;
+                        dfsStk.push(unvisitedNeighbor);
+                    }
+                }
+            }
+        }
+
         return new TraversalResult(false, visitOrder);
     }
 }
