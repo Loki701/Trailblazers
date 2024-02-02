@@ -1,7 +1,7 @@
 package edu.ufl.trailblazers.Service;
 
 import edu.ufl.trailblazers.Model.Cell;
-import edu.ufl.trailblazers.Model.TraversalResult;
+import edu.ufl.trailblazers.Model.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -49,7 +49,7 @@ public class PathfindingService {
     }
 
     // Given a valid maze, find a path from start to finish using Breadth First Search.
-    public static TraversalResult traverseBfs(int[][] maze) {
+    public static AlgorithmResult runBFS(int[][] maze) {
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -84,7 +84,7 @@ public class PathfindingService {
 
                         // If current neighbor is the finish...
                         if (newRow == finish.row() && newCol == finish.col()) {
-                            return new TraversalResult(true, visitOrder); // Complete path found.
+                            return new AlgorithmResult(true, visitOrder); // Complete path found.
                         }
 
                         bfsVisited[newRow][newCol] = true;
@@ -95,12 +95,12 @@ public class PathfindingService {
         }
 
         // If bfsQ is empty and end isn't reached, maze can't be finished.
-        return new TraversalResult(false, visitOrder);
+        return new AlgorithmResult(false, visitOrder);
     }
 
     // Given a valid maze, find a path from start to finish using Depth First Search. Same logic as BFS, but with a
     // stack instead of a queue.
-    public static TraversalResult traverseDfs(int[][] maze) {
+    public static AlgorithmResult runDFS(int[][] maze) {
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -128,7 +128,7 @@ public class PathfindingService {
                         visitOrder.add(unvisitedNeighbor);
 
                         if (newRow == finish.row() && newCol == finish.col()) {
-                            return new TraversalResult(true, visitOrder);
+                            return new AlgorithmResult(true, visitOrder);
                         }
 
                         dfsVisited[newRow][newCol] = true;
@@ -138,6 +138,6 @@ public class PathfindingService {
             }
         }
 
-        return new TraversalResult(false, visitOrder);
+        return new AlgorithmResult(false, visitOrder);
     }
 }
