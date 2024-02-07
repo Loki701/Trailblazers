@@ -16,7 +16,16 @@ public class MazeController {
         this.mazeService = mazeService;
     }
 
-    @PostMapping("/initialize")
+    @PostMapping("/initialize/default")
+    public ResponseEntity<String> initializeDefault() {
+        if (mazeService.getMaze() != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Maze has already been initialized");
+        }
+        mazeService.initialize(48, 48); // Default maze dimensions.
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/initialize/custom")
     public ResponseEntity<String> initialize(@RequestParam int rowCount, @RequestParam int colCount) {
         if (mazeService.getMaze() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Maze has already been initialized");
