@@ -1,6 +1,8 @@
 package edu.ufl.trailblazers.Controller;
 
 import edu.ufl.trailblazers.Model.AlgorithmResult;
+import edu.ufl.trailblazers.Model.Maze;
+import edu.ufl.trailblazers.Service.MazeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
