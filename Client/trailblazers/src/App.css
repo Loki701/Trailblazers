@@ -1,6 +1,39 @@
+:root{
+    --bg-color: #282c34;
+    --text-color: #ededed;
+    --main-color: #00abf0;
+    --color-black: #000000;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    scroll-behavior: smooth;
+    font-family: 'poppins', sans-serif;
+}
+html, body{
+    overflow-x: hidden;
+}
+.App{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--bg-color);
+}
+.home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 150vh;
+    background-color: var(--bg-color);
+}
 .grid {
-    margin-top: 80px;
     line-height: 0;
     height: 150vh;
-    margin-left: 80px;
+    margin-top: 5rem;
 }

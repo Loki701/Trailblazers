@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext,StateContext} from "react";
 import { useStateProvider } from "../../context/StateContext";
 import { reducerCases } from "../../context/constants";
+// import {}
 import Node from "./Node";
 
 const Table = () => {
@@ -13,7 +14,7 @@ const Table = () => {
     useEffect(() => {
 
         if(!tableState){
-            setNodes(Array.from({ length: 32 }, () => Array(32).fill(0)));
+            setNodes(Array.from({ length: 48 }, () => Array(48).fill(0)));
             dispatch({type: reducerCases.UPDATE_TABLE_STATE, newState: true});
         }
             
@@ -26,11 +27,10 @@ const Table = () => {
     }, [nodes]);
 
 
+
+
     return (
         <div className='grid'>
-            { console.log("nodes array: ", nodes)}
-            { console.log("table array: ", table)}
-            { console.log("tableState: ", tableState)}
             {table && table.map((row, rowIdx) => (
             <div key={rowIdx}>
                 {row.map((node, columnIdx) => (
