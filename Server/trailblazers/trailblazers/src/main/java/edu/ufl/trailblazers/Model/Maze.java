@@ -5,6 +5,7 @@ import static edu.ufl.trailblazers.Model.CellType.*;
 public class Maze {
     private int[][] board;
     private int configID; // Custom configuration is -1, default is 0, preset1 is 1, preset2 is 2, etc.
+    // configID is NOT accurate if board has been edited to match a configuration, but that's okay.
     private Coords start;
     private Coords finish;
 
@@ -41,6 +42,36 @@ public class Maze {
             }
             default -> throw new IllegalArgumentException(); // MazeController ensures passed-in presetID is 1-3.
         }
+    }
+
+    public void editWall(int row, int col) {
+        int currentStatus = board[row][col];
+        if (currentStatus == EMPTY.value) {
+            board[row][col] = WALL.value;
+        }
+        else if (currentStatus == WALL.value) {
+            board[row][col] = EMPTY.value;
+        }
+        else {
+            throw new IllegalArgumentException(); // MazeController ensures passed-in location isn't start or finish.
+        }
+        configID = -1;
+    }
+
+    // Moves start to the passed-in location.
+    public void moveStart(int row, int col) {
+        board[start.row()][start.row()] = EMPTY.value;
+        board[row][col] = START.value;
+        start = new Coords(row, col);
+        configID = -1;
+    }
+
+    // Moves finish to the passed-in location.
+    public void moveFinish(int row, int col) {
+        board[finish.row()][finish.row()] = EMPTY.value;
+        board[row][col] = FINISH.value;
+        finish = new Coords(row, col);
+        configID = -1;
     }
 
     public int[][] getBoard() {

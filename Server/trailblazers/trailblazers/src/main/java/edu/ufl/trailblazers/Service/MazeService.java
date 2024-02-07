@@ -26,15 +26,15 @@ public class MazeService {
     }
 
     public void editWall(int row, int col) {
-        throw new UnsupportedOperationException(); // TODO
+        maze.editWall(row, col);
     }
 
     public void moveStart(int row, int col) {
-        throw new UnsupportedOperationException(); // TODO
+        maze.moveStart(row, col);
     }
 
     public void moveFinish(int row, int col) {
-        throw new UnsupportedOperationException(); // TODO
+        maze.moveFinish(row, col);
     }
 
     public Maze getMaze() {

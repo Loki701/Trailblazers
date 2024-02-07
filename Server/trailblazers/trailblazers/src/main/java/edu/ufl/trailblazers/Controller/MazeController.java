@@ -30,7 +30,7 @@ public class MazeController {
         if (mazeService.getMaze() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Maze has already been initialized");
         }
-        if (rowCount * colCount < 2) { // Mazes must have space for a Start and Finish cell.
+        if (rowCount * colCount < 2) { // Mazes must have space for a start and finish cell.
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A maze must have at least two cells");
         }
         mazeService.initialize(rowCount, colCount);
@@ -87,7 +87,7 @@ public class MazeController {
         if (mazeService.isStartCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location is already a Start cell");
         }
-        mazeService.moveStart(row, col); // Moves the Start cell from the previous location to this location.
+        mazeService.moveStart(row, col); // Moves the start cell from the previous location to this location.
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -99,7 +99,7 @@ public class MazeController {
         if (mazeService.isFinishCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location is already a Finish cell");
         }
-        mazeService.moveFinish(row, col); // Moves the Finish cell from the previous location to this location.
+        mazeService.moveFinish(row, col); // Moves the finish cell from the previous location to this location.
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
