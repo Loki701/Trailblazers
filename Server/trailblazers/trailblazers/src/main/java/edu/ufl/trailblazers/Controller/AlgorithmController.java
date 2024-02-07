@@ -20,7 +20,7 @@ public class AlgorithmController {
         this.mazeService = mazeService;
     }
 
-    @GetMapping("/runBFS")
+    @GetMapping("/run/bfs")
     public ResponseEntity<AlgorithmResult> runBFS() {
         int[][] board = mazeService.getBoard();
         Coords start = mazeService.getStart();
@@ -29,7 +29,7 @@ public class AlgorithmController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/runDFS")
+    @GetMapping("/run/dfs")
     public ResponseEntity<AlgorithmResult> runDFS() {
         int[][] board = mazeService.getBoard();
         Coords start = mazeService.getStart();
@@ -38,7 +38,7 @@ public class AlgorithmController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/runDijkstra")
+    @GetMapping("/run/dijkstra")
     public ResponseEntity<AlgorithmResult> runDijkstra() {
         int[][] board = mazeService.getBoard();
         Coords start = mazeService.getStart();

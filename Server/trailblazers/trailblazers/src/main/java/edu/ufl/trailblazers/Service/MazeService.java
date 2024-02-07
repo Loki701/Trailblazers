@@ -13,14 +13,14 @@ public class MazeService {
         maze = new Maze(rowCount, colCount);
     }
 
-    // Resets the initialized maze to a fresh maze of the same size.
-    public void reset() {
+    // Sets the maze to one of the same size with default configuration.
+    public void setDefault() {
         int rowCount = maze.getRowCount();
         int colCount = maze.getColCount();
         maze = new Maze(rowCount, colCount);
     }
 
-    // Initializes a maze to a preset configuration.
+    // Sets the maze to a preset configuration.
     public void setPreset(int presetID) {
         maze = new Maze(presetID);
     }

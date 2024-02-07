@@ -9,8 +9,8 @@ public class Maze {
     private Coords start;
     private Coords finish;
 
-    // Sets maze to the default configuration with the passed-in dimensions. All cells are empty except top left (Start)
-    // and bottom right (Finish).
+    // Initializes maze in the default configuration with the passed-in dimensions. All cells are empty except top left
+    // (start) and bottom right (finish).
     public Maze(int rowCount, int colCount) {
         board = new int[rowCount][colCount]; // Filled with 0s by default.
 
@@ -25,7 +25,7 @@ public class Maze {
         configID = 0;
     }
 
-    // Sets maze to a preset configuration.
+    // Initializes maze in a preset configuration.
     public Maze(int presetID) { // TODO: Initialize board to preset configurations 1-3.
         switch (presetID) {
             case 1 -> {
@@ -44,6 +44,7 @@ public class Maze {
         }
     }
 
+    // Flips wall status at the passed-in location.
     public void editWall(int row, int col) {
         int currentStatus = board[row][col];
         if (currentStatus == EMPTY.value) {
