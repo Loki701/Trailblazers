@@ -5,13 +5,22 @@ import static edu.ufl.trailblazers.Model.CellType.*;
 public class Maze {
     private int[][] board;
     private int configID; // Custom configuration is -1, default is 0, preset1 is 1, preset2 is 2, etc.
+    private Coords start;
+    private Coords finish;
 
     // Sets maze to the default configuration with the passed-in dimensions. All cells are empty except top left (Start)
     // and bottom right (Finish).
     public Maze(int rowCount, int colCount) {
         board = new int[rowCount][colCount]; // Filled with 0s by default.
+
         board[0][0] = START.value;
-        board[rowCount - 1][colCount - 1] = FINISH.value;
+        start = new Coords(0, 0);
+
+        int lastRow = rowCount - 1;
+        int lastCol = colCount - 1;
+        board[lastRow][lastCol] = FINISH.value;
+        finish = new Coords(lastRow, lastCol);
+
         configID = 0;
     }
 
@@ -34,6 +43,10 @@ public class Maze {
         }
     }
 
+    public int[][] getBoard() {
+        return board;
+    }
+
     public int getRowCount() {
         return board.length;
     }
@@ -46,7 +59,11 @@ public class Maze {
         return configID;
     }
 
-    public int[][] getBoard() {
-        return board;
+    public Coords getStart() {
+        return start;
+    }
+
+    public Coords getFinish() {
+        return finish;
     }
 }

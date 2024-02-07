@@ -1,5 +1,6 @@
 package edu.ufl.trailblazers.Service;
 
+import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Model.Maze;
 import org.springframework.stereotype.Service;
 
@@ -48,11 +49,21 @@ public class MazeService {
         return maze.getConfiguration();
     }
 
+    public Coords getStart() {
+        return maze.getStart();
+    }
+
+    public Coords getFinish() {
+        return maze.getFinish();
+    }
+
     public boolean isStartCell(int row, int col) {
-        throw new UnsupportedOperationException(); // TODO
+        Coords start = maze.getStart();
+        return start.row() == row && start.col() == col;
     }
 
     public boolean isFinishCell(int row, int col) {
-        throw new UnsupportedOperationException(); // TODO
+        Coords finish = maze.getFinish();
+        return finish.row() == row && finish.col() == col;
     }
 }

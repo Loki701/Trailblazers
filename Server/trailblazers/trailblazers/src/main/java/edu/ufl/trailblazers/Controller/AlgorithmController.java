@@ -1,7 +1,8 @@
 package edu.ufl.trailblazers.Controller;
 
 import edu.ufl.trailblazers.Model.AlgorithmResult;
-import edu.ufl.trailblazers.Model.Maze;
+import edu.ufl.trailblazers.Model.Coords;
+import edu.ufl.trailblazers.Service.AlgorithmService;
 import edu.ufl.trailblazers.Service.MazeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,22 +22,28 @@ public class AlgorithmController {
 
     @GetMapping("/runBFS")
     public ResponseEntity<AlgorithmResult> runBFS() {
-        Maze maze = mazeService.getMaze();
-        AlgorithmResult result = AlgorithmService.runBFS(maze);
+        int[][] board = mazeService.getBoard();
+        Coords start = mazeService.getStart();
+        Coords finish = mazeService.getFinish();
+        AlgorithmResult result = AlgorithmService.runBFS(board, start, finish);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/runDFS")
     public ResponseEntity<AlgorithmResult> runDFS() {
-        Maze maze = mazeService.getMaze();
-        AlgorithmResult result = AlgorithmService.runDFS(maze);
+        int[][] board = mazeService.getBoard();
+        Coords start = mazeService.getStart();
+        Coords finish = mazeService.getFinish();
+        AlgorithmResult result = AlgorithmService.runDFS(board, start, finish);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/runDijkstra")
     public ResponseEntity<AlgorithmResult> runDijkstra() {
-        Maze maze = mazeService.getMaze();
-        AlgorithmResult result = AlgorithmService.runDijkstra(maze);
+        int[][] board = mazeService.getBoard();
+        Coords start = mazeService.getStart();
+        Coords finish = mazeService.getFinish();
+        AlgorithmResult result = AlgorithmService.runDijkstra(board, start, finish);
         return ResponseEntity.ok(result);
     }
 }
