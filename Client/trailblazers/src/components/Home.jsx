@@ -2,7 +2,9 @@
 import Table from './visualizer/Table';
 
 const Home = () => {
-
+  function refreshPage(){ 
+    window.location.reload(); 
+}
   return (
     <div className='home'>
       <Table />
