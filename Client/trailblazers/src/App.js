@@ -21,7 +21,8 @@ function App() {
     <StateProvider initialState={initialState} reducer={reducer}>
     <BrowserRouter>
     <div className="App">
-      <>
+
+      
       <Navbar style={{backgroundColor:'#008ae6'}} data-bs-theme="dark">
         <Container>
         <Link to="/" style={{ textDecoration: 'none' }}>
@@ -46,9 +47,7 @@ function App() {
         
         </Container>
       </Navbar>
-      
-    </>
-    <div>
+    
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/algorithm" element={<Algorithm/>}/>
@@ -56,9 +55,7 @@ function App() {
         <Route path="/community" element={<Community/>}/>
         <Route path="/resources" element={<Resources/>}/>
         <Route path="/about-us" element={<AboutUs/>}/>
-
       </Routes>
-    </div>
     </div>
     </BrowserRouter>
     </StateProvider>

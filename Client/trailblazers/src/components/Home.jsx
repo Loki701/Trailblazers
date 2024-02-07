@@ -4,7 +4,7 @@ import Table from './visualizer/Table';
 const Home = () => {
 
   return (
-    <div className='grid'>
+    <div className='home'>
       <Table />
     </div>
   );
