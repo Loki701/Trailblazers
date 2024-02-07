@@ -10,11 +10,20 @@ const Node = ({rowIdx, columnIdx}) => {
 
   const [{table}, dispatch] = useStateProvider();
   const [color, setColor] = useState('white');
+  const [clicked, setClick] = useState(false);
+
   
   const handleClick = () => {
     let newTable = table;
     setColor(color == 'white'? "black": "white");
-    newTable[rowIdx][columnIdx] = 1;
+    if (clicked == true){
+        setClick(false);
+    }
+    else{
+      setClick(true);
+    }
+    console.log(clicked);
+    setClick(true);newTable[rowIdx][columnIdx] = 1;
     dispatch({
       type: 'UPDATE_NODE', 
       table: {
