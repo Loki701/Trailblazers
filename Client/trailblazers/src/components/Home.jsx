@@ -6,9 +6,10 @@ const Home = () => {
     window.location.reload(); 
 }
   return (
-  
     <div className='grid'>
-      
+    <script>
+        refreshPage();
+    </script>
       <Table ></Table>
     </div>
   );
