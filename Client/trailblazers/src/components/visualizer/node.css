@@ -10,7 +10,7 @@
 }
 
 .black {
-    background-color: blue;
+    background-color: var(--main-color);
 }
 
 .node:hover {

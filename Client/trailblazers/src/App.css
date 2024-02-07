@@ -23,8 +23,6 @@ html, body{
     flex-direction: column;
     height: 100vh;
     background-color: var(--bg-color);
-    color: white;
-
 }
 .home{
     display: flex;
@@ -32,11 +30,8 @@ html, body{
     align-items: center;
     justify-content: center;
     height: 150vh;
-    background-color: #282c34;
-    color: white;
-
+    background-color: var(--bg-color);
 }
-
 .grid {
     line-height: 0;
     height: 150vh;
