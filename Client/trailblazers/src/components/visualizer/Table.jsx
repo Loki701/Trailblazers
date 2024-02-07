@@ -1,15 +1,13 @@
 import { useState, useEffect, useContext,StateContext} from "react";
 import { useStateProvider } from "../../context/StateContext";
 import { reducerCases } from "../../context/constants";
-// import {}
+import useMousePosition from "../../utils/useMousePosition";
 import Node from "./Node";
 
 const Table = () => {
     const [{table, tableState}, dispatch] = useStateProvider();
     const [nodes, setNodes] = useState([]);
-    const [tileCounter, setTileCounter] = useState(0);
-     // Initialize a 2D array with 3 rows and 4 columns
-    //   const initialArray = Array.from({ length: 3 }, () => Array(4).fill(0));
+    const mousePosition = useMousePosition();
 
     useEffect(() => {
 
@@ -38,6 +36,7 @@ const Table = () => {
             ))}
         </div>
       ))}
+      {JSON.stringify(mousePosition)}
     </div>
     );
 }
