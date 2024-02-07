@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext,StateContext} from "react";
 import { useStateProvider } from "../../context/StateContext";
 import { reducerCases } from "../../context/constants";
-import 
+// import {}
 import Node from "./Node";
 
 const Table = () => {
