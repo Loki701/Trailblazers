@@ -1,12 +1,8 @@
-// import React, { useState, useEffect } from "react";
-import Table from './visualizer/Table';
+import Table from "./Table";
 
 const Home = () => {
-  function refreshPage(){ 
-    window.location.reload(); 
-}
   return (
-    <div className='home'>
+    <div className="home">
       <Table />
     </div>
   );

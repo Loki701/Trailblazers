@@ -55,6 +55,55 @@ html, body{
     background-color: var(--color-3);
   }
 
+  .header{
+    /* height: 10rem; */
+    width: 100%;
+    background-color: var(--color-1);
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+  }
+  .logo{
+    /* background-color: blue; */
+    margin-left: 15rem;
+    cursor: pointer;
+  }
+  .logo img{
+    height: 10rem;
+    scale: 1.8;
+  }
+  .links{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    font-size: 1.7rem;
+    text-transform: uppercase;
+    list-style: none;
+  }
+  .links li{
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: .3s;
+  }
+  .links li:after{
+    background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: var(--color-5);
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+  }
+  .links :hover:after{
+    width: 100%;
+    left: 0;
+  }
+
   @keyframes multicolor {
     0% {
         background-color: var(--color-5);
