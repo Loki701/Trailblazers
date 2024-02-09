@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext,StateContext} from "react";
+import { useState, useEffect, useContext, StateContext} from "react";
 import { useStateProvider } from "../../context/StateContext";
 import { reducerCases } from "../../context/constants";
 import useMousePosition from "../../utils/useMousePosition";
@@ -36,7 +36,7 @@ const Table = () => {
             ))}
         </div>
       ))}
-      {JSON.stringify(mousePosition)}
+      {/* {JSON.stringify(mousePosition)} */}
     </div>
     );
 }

@@ -1,6 +1,6 @@
 import { useStateProvider } from "../../context/StateContext";
 import { useState } from 'react';
-import withComponentLocation from '../../utils/withComponentLocation';
+import useComponentLocation from "../../utils/useComponentLocation";
 
 function className(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -11,6 +11,7 @@ const Node = ({rowIdx, columnIdx}) => {
   const [{table}, dispatch] = useStateProvider();
   const [color, setColor] = useState('white');
   const [clicked, setClick] = useState(false);
+  const { componentRef, componentPosition} = useComponentLocation();
 
   
   const handleClick = () => {
@@ -31,9 +32,12 @@ const Node = ({rowIdx, columnIdx}) => {
       }
       });
   };
-  return <div 
+  return (
+  <div 
+    ref={componentRef}
     className={className(color == "white"? "white": "black", "node")} onClick={handleClick}>
-  </div>;
+  </div>
+  );
 };
 
-export default withComponentLocation(Node);
+export default Node;
