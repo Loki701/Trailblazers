@@ -39,13 +39,13 @@ html, body{
 }
 .grid {
     display: grid;
-    grid-template-columns: repeat(48, 30px); /* Adjust the number of columns and size as needed */
+    grid-template-columns: repeat(48, 15px); /* Adjust the number of columns and size as needed */
     gap: 2px;
   }
   
   .tile {
-    width: 30px; /* Adjust the size of each tile as needed */
-    height: 30px;
+    width: 1rem; /* Adjust the size of each tile as needed */
+    height: 1rem;
     border: 1px solid #ccc;
     cursor: pointer;
     background-color: var(--bg-color);
@@ -64,12 +64,12 @@ html, body{
   }
   .logo{
     /* background-color: blue; */
-    margin-left: 15rem;
+    margin-left: 6rem;
     cursor: pointer;
   }
   .logo img{
     height: 10rem;
-    scale: 1.8;
+    scale: 1.5;
   }
   .links{
     height: 100%;
@@ -77,7 +77,7 @@ html, body{
     justify-content: center;
     align-items: center;
     gap: 3rem;
-    font-size: 1.7rem;
+    font-size: 1rem;
     text-transform: uppercase;
     list-style: none;
   }
