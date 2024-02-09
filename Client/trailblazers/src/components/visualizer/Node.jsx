@@ -1,6 +1,6 @@
-import './node.css';
 import { useStateProvider } from "../../context/StateContext";
 import { useState } from 'react';
+import withComponentLocation from '../../utils/withComponentLocation';
 
 function className(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,9 +31,9 @@ const Node = ({rowIdx, columnIdx}) => {
       }
       });
   };
-  return <div className={className(color == "white"? "white": "black", "node")} onClick={handleClick}>
-
+  return <div 
+    className={className(color == "white"? "white": "black", "node")} onClick={handleClick}>
   </div>;
 };
 
-export default Node;
+export default withComponentLocation(Node);

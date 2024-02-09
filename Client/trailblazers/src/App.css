@@ -37,3 +37,22 @@ html, body{
     height: 150vh;
     margin-top: 5rem;
 }
+
+.node {
+    width: 10px;
+    height: 10px;
+    outline: 1px solid grey;
+    display: inline-block;
+}
+
+.white {
+    background-color: orange;
+}
+
+.black {
+    background-color: var(--main-color);
+}
+
+.node:hover {
+    cursor: pointer;
+}
