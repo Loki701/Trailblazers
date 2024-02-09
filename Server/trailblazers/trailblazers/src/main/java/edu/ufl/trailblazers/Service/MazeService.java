@@ -2,6 +2,7 @@ package edu.ufl.trailblazers.Service;
 
 import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Model.Maze;
+import edu.ufl.trailblazers.Model.MazeConfiguration;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,7 +46,7 @@ public class MazeService {
         return maze.getBoard();
     }
 
-    public int getConfiguration() {
+    public MazeConfiguration getConfiguration() {
         return maze.getConfiguration();
     }
 

@@ -106,6 +106,6 @@ public class AlgorithmService {
     }
 
     public static AlgorithmResult runDijkstra(int[][] maze, Coords start, Coords finish) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(); // TODO: Code Dijkstra's algorithm.
     }
 }

@@ -1,5 +1,6 @@
 package edu.ufl.trailblazers.Controller;
 
+import edu.ufl.trailblazers.Model.MazeConfiguration;
 import edu.ufl.trailblazers.Service.MazeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class MazeController {
         if (mazeService.getMaze() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized");
         }
-        if (mazeService.getConfiguration() == 0) {
+        if (mazeService.getConfiguration() == MazeConfiguration.DEFAULT) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Maze was just set to default configuration");
         }
         mazeService.setDefault(); // Sets the maze to one of the same size with default configuration.
@@ -57,7 +58,7 @@ public class MazeController {
         if (1 > presetID || presetID > 3) { // Valid presetIDs are 1, 2, 3, etc. Use setDefault() to set default maze.
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preset ID " + presetID + " does not exist");
         }
-        if (mazeService.getConfiguration() == presetID) {
+        if (mazeService.getConfiguration().value == presetID) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Maze was just configured to preset " + presetID);
         }
         mazeService.setPreset(presetID); // Sets the maze to a preset configuration with the passed-in ID.

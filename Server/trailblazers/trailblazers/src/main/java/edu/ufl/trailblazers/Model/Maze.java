@@ -3,8 +3,8 @@ package edu.ufl.trailblazers.Model;
 import static edu.ufl.trailblazers.Model.CellType.*;
 
 public class Maze {
-    private int[][] board;
-    private int configID; // Custom configuration is -1, default is 0, preset1 is 1, preset2 is 2, etc.
+    private final int[][] board;
+    private MazeConfiguration config;
     // configID is NOT accurate if board has been edited to match a configuration, but that's okay.
     private Coords start;
     private Coords finish;
@@ -22,23 +22,17 @@ public class Maze {
         board[lastRow][lastCol] = FINISH.value;
         finish = new Coords(lastRow, lastCol);
 
-        configID = 0;
+        config = MazeConfiguration.DEFAULT;
     }
 
     // Initializes maze in a preset configuration.
-    public Maze(int presetID) { // TODO: Initialize board to preset configurations 1-3.
+    public Maze(int presetID) {
         switch (presetID) {
-            case 1 -> {
-                configID = presetID;
-                throw new UnsupportedOperationException();
-            }
-            case 2 -> {
-                configID = presetID;
-                throw new UnsupportedOperationException();
-            }
-            case 3 -> {
-                configID = presetID;
-                throw new UnsupportedOperationException();
+            case 1, 2, 3 -> {
+                board = MazeConfiguration.getPresetBoard(presetID);
+                config = MazeConfiguration.getPresetEnum(presetID);
+                start = MazeConfiguration.getPresetStart(presetID);
+                finish = MazeConfiguration.getPresetFinish(presetID);
             }
             default -> throw new IllegalArgumentException(); // MazeController ensures passed-in presetID is 1-3.
         }
@@ -53,10 +47,10 @@ public class Maze {
         else if (currentStatus == WALL.value) {
             board[row][col] = EMPTY.value;
         }
-        else {
-            throw new IllegalArgumentException(); // MazeController ensures passed-in location isn't start or finish.
+        else { // MazeController ensures passed-in location isn't start or finish.
+            throw new IllegalArgumentException("Server Bug: Cannot build a wall on start or finish cell");
         }
-        configID = -1;
+        config = MazeConfiguration.CUSTOM;
     }
 
     // Moves start to the passed-in location.
@@ -64,7 +58,7 @@ public class Maze {
         board[start.row()][start.row()] = EMPTY.value;
         board[row][col] = START.value;
         start = new Coords(row, col);
-        configID = -1;
+        config = MazeConfiguration.CUSTOM;
     }
 
     // Moves finish to the passed-in location.
@@ -72,7 +66,7 @@ public class Maze {
         board[finish.row()][finish.row()] = EMPTY.value;
         board[row][col] = FINISH.value;
         finish = new Coords(row, col);
-        configID = -1;
+        config = MazeConfiguration.CUSTOM;
     }
 
     public int[][] getBoard() {
@@ -87,8 +81,8 @@ public class Maze {
         return board[0].length;
     }
 
-    public int getConfiguration() {
-        return configID;
+    public MazeConfiguration getConfiguration() {
+        return config;
     }
 
     public Coords getStart() {
