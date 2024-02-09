@@ -1,8 +1,9 @@
 :root{
-    --bg-color: #282c34;
-    --text-color: #ededed;
-    --main-color: #00abf0;
-    --color-black: #000000;
+    --color-1: #90C2E7;
+    --color-2: #4E8098;
+    --color-3: #00A9A5;
+    --color-4: #0B5351;
+    --color-5: #092327;
 }
 
 *{
@@ -21,38 +22,50 @@ html, body{
 .App{
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    background-color: var(--bg-color);
 }
 .home{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 150vh;
-    background-color: var(--bg-color);
+    height: 100vh;
+    background-color: var(--color-5);
+}
+.table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .grid {
-    line-height: 0;
-    height: 150vh;
-    margin-top: 5rem;
-}
-
-.node {
-    width: 10px;
-    height: 10px;
-    outline: 1px solid grey;
-    display: inline-block;
-}
-
-.white {
-    background-color: orange;
-}
-
-.black {
-    background-color: var(--main-color);
-}
-
-.node:hover {
+    display: grid;
+    grid-template-columns: repeat(48, 30px); /* Adjust the number of columns and size as needed */
+    gap: 2px;
+  }
+  
+  .tile {
+    width: 30px; /* Adjust the size of each tile as needed */
+    height: 30px;
+    border: 1px solid #ccc;
     cursor: pointer;
+    background-color: var(--bg-color);
+  }
+  .tile.active{
+    animation: 3s multicolor;
+    background-color: var(--color-3);
+  }
+
+  @keyframes multicolor {
+    0% {
+        background-color: var(--color-5);
+    }
+    33% {
+        background-color: var(--color-4);
+    }
+    66% {
+        background-color: var(--color-2);
+    }
+    100% {
+        background-color: var(--color-3);
+    }
 }

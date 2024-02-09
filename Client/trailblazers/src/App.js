@@ -23,7 +23,7 @@ function App() {
     <div className="App">
 
       
-      <Navbar style={{backgroundColor:'#008ae6'}} data-bs-theme="dark">
+      <Navbar style={{backgroundColor:'#00A9A5'}} data-bs-theme="dark">
         <Container>
         <Link to="/" style={{ textDecoration: 'none' }}>
                 <Navbar.Brand style={{ fontWeight: 'bolder' , color: 'black'}}>TrailBlazers</Navbar.Brand>

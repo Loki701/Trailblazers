@@ -17,6 +17,10 @@ const reducer = (state, action) => {
                 ...state,
                 tableState: action.newState,
             };
+        case reducerCases.UPDATE_TILE:
+            return{
+                ...state,
+            }
         default:
             return state;
     }

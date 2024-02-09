@@ -1,42 +1,49 @@
 import { useState, useEffect, useContext, StateContext} from "react";
-import { useStateProvider } from "../../context/StateContext";
-import { reducerCases } from "../../context/constants";
-import useMousePosition from "../../utils/useMousePosition";
-import Node from "./Node";
+import Tile from "./Tile";
 
 const Table = () => {
-    const [{table, tableState}, dispatch] = useStateProvider();
-    const [nodes, setNodes] = useState([]);
-    const mousePosition = useMousePosition();
+    const [tiles, setTiles] = useState(Array.from({ length: 48*48 }, () => false));
+    const [isMouseDown, setIsMouseDown] = useState(false);
 
-    useEffect(() => {
 
-        if(!tableState){
-            setNodes(Array.from({ length: 48 }, () => Array(48).fill(0)));
-            dispatch({type: reducerCases.UPDATE_TABLE_STATE, newState: true});
+    const handleMouseDown = (index) => {
+        setIsMouseDown(true);
+        handleTileClick(index);
+      };
+    
+      const handleMouseEnter = (index) => {
+        if (isMouseDown) {
+          handleTileClick(index);
         }
-            
-    });
-    useEffect(() => {
-        dispatch({
-            type: reducerCases.UPDATE_TABLE, 
-            newTable: nodes
-        });
-    }, [nodes]);
-
+      };
+    
+      const handleMouseUp = () => {
+        setIsMouseDown(false);
+      };
+    
+      const handleTileClick = (index) => {
+        const newTiles = [...tiles];
+        newTiles[index] = !tiles[index]; // Change the color to black (you can modify this as needed)
+        setTiles(newTiles);
+      };
+    
 
 
 
     return (
-        <div className='grid'>
-            {table && table.map((row, rowIdx) => (
-            <div key={rowIdx}>
-                {row.map((node, columnIdx) => (
-                <Node key={`${rowIdx}-${columnIdx}`} rowIdx={rowIdx} columnIdx={columnIdx} /> // Ensure each Node has a unique key prop
-            ))}
-        </div>
-      ))}
-      {/* {JSON.stringify(mousePosition)} */}
+        <div 
+            className='table'
+            onMouseUp={handleMouseUp}>
+            <div className="grid">
+                {tiles.map((state, index) => (
+                    <Tile
+                        key={index}
+                        tileState={state}
+                        onClick={() => handleMouseDown(index)}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                    />
+                ))}
+            </div>
     </div>
     );
 }
