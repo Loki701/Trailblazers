@@ -1,13 +1,13 @@
 import './App.css';
 import {
   Route,
-  Link, Routes, BrowserRouter
+   Routes, BrowserRouter
 } from "react-router-dom";
+
 import { Algorithm, Community, MiniGames, Resources, Navbar, AboutUs, Home } from './components';
 
 import { StateProvider } from './context/StateContext';
 import reducer, {initialState} from './context/StateReducers';
-
 
 function App() {
   return (
@@ -28,6 +28,7 @@ function App() {
     </div>
     </BrowserRouter>
     </StateProvider>
+    
   );
 }
 
