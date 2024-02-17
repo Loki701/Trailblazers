@@ -4,8 +4,6 @@ import static edu.ufl.trailblazers.Model.CellType.*;
 
 public class Maze {
     private final int[][] board;
-    private MazeConfiguration config;
-    // configID is NOT accurate if board has been edited to match a configuration, but that's okay.
     private Coords start;
     private Coords finish;
 
@@ -21,8 +19,6 @@ public class Maze {
         int lastCol = colCount - 1;
         board[lastRow][lastCol] = FINISH.value;
         finish = new Coords(lastRow, lastCol);
-
-        config = MazeConfiguration.DEFAULT;
     }
 
     // Initializes maze in a preset configuration.
@@ -30,7 +26,6 @@ public class Maze {
         switch (presetID) {
             case 1, 2, 3 -> {
                 board = MazeConfiguration.getPresetBoard(presetID);
-                config = MazeConfiguration.getPresetEnum(presetID);
                 start = MazeConfiguration.getPresetStart(presetID);
                 finish = MazeConfiguration.getPresetFinish(presetID);
             }
@@ -38,19 +33,20 @@ public class Maze {
         }
     }
 
-    // Flips wall status at the passed-in location.
-    public void editWall(int row, int col) {
+    // Flips wall status at the passed-in location. Returns true if a wall was built or false if a wall was destroyed.
+    public boolean editWall(int row, int col) {
         int currentStatus = board[row][col];
         if (currentStatus == EMPTY.value) {
             board[row][col] = WALL.value;
+            return true;
         }
         else if (currentStatus == WALL.value) {
             board[row][col] = EMPTY.value;
+            return false;
         }
         else { // MazeController ensures passed-in location isn't start or finish.
             throw new IllegalArgumentException("Server Bug: Cannot build a wall on start or finish cell");
         }
-        config = MazeConfiguration.CUSTOM;
     }
 
     // Moves start to the passed-in location.
@@ -58,7 +54,6 @@ public class Maze {
         board[start.row()][start.row()] = EMPTY.value;
         board[row][col] = START.value;
         start = new Coords(row, col);
-        config = MazeConfiguration.CUSTOM;
     }
 
     // Moves finish to the passed-in location.
@@ -66,7 +61,6 @@ public class Maze {
         board[finish.row()][finish.row()] = EMPTY.value;
         board[row][col] = FINISH.value;
         finish = new Coords(row, col);
-        config = MazeConfiguration.CUSTOM;
     }
 
     public int[][] getBoard() {
@@ -79,10 +73,6 @@ public class Maze {
 
     public int getColCount() {
         return board[0].length;
-    }
-
-    public MazeConfiguration getConfiguration() {
-        return config;
     }
 
     public Coords getStart() {

@@ -1,14 +1,6 @@
 package edu.ufl.trailblazers.Model;
 
-public enum MazeConfiguration {
-    CUSTOM(-1), DEFAULT(0), PRESET1(1), PRESET2(2), PRESET3(3);
-
-    public final int value;
-
-    MazeConfiguration(int value) {
-        this.value = value;
-    }
-
+public class MazeConfiguration {
     private static final int[][] preset1Board, preset2Board, preset3Board;
     private static final Coords preset1Start, preset2Start, preset3Start;
     private static final Coords preset1Finish, preset2Finish, preset3Finish;
@@ -27,16 +19,6 @@ public enum MazeConfiguration {
         preset3Board = new int[presetHeight][presetWidth];
         preset3Start = new Coords(0, 0);
         preset3Finish = new Coords(47, 47);
-    }
-
-    // Given a valid presetID, return the corresponding MazeConfiguration enum.
-    public static MazeConfiguration getPresetEnum(int presetID) {
-        return switch (presetID) {
-            case 1 -> PRESET1;
-            case 2 -> PRESET2;
-            case 3 -> PRESET3;
-            default -> throw new IllegalArgumentException("Server Bug: getPresetName() illegal argument");
-        };
     }
 
     // Given a valid presetID, return the corresponding board layout.

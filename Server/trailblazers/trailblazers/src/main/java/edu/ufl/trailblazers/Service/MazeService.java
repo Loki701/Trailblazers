@@ -2,7 +2,6 @@ package edu.ufl.trailblazers.Service;
 
 import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Model.Maze;
-import edu.ufl.trailblazers.Model.MazeConfiguration;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,8 +25,9 @@ public class MazeService {
         maze = new Maze(presetID);
     }
 
-    public void editWall(int row, int col) {
-        maze.editWall(row, col);
+    // Flips wall status at the passed-in location. Returns true if a wall was built or false if a wall was destroyed.
+    public boolean editWall(int row, int col) {
+        return maze.editWall(row, col);
     }
 
     public void moveStart(int row, int col) {
@@ -46,8 +46,12 @@ public class MazeService {
         return maze.getBoard();
     }
 
-    public MazeConfiguration getConfiguration() {
-        return maze.getConfiguration();
+    public int getRowCount() {
+        return maze.getRowCount();
+    }
+
+    public int getColCount() {
+        return maze.getColCount();
     }
 
     public Coords getStart() {
@@ -66,5 +70,9 @@ public class MazeService {
     public boolean isFinishCell(int row, int col) {
         Coords finish = maze.getFinish();
         return finish.row() == row && finish.col() == col;
+    }
+
+    public void deleteMaze() {
+        maze = null;
     }
 }
