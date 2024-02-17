@@ -14,48 +14,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/algorithm")
 public class AlgorithmController {
-    private final MazeService mazeService;
+    private final MazeService ms;
     private final ResponseEntity<String> mazeNotFound;
 
     @Autowired
     public AlgorithmController(MazeService mazeService) {
-        this.mazeService = mazeService;
+        ms = mazeService;
         mazeNotFound = ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized");
     }
 
     @GetMapping("/run/bfs")
     public ResponseEntity<?> runBFS() {
-        if (mazeService.getMaze() == null) {
+        if (ms.getMaze() == null) {
             return mazeNotFound;
         }
-        int[][] board = mazeService.getBoard();
-        Coords start = mazeService.getStart();
-        Coords finish = mazeService.getFinish();
-        AlgorithmResult result = AlgorithmService.runBFS(board, start, finish);
+        AlgorithmResult result = AlgorithmService.runBFS(ms.getBoard(), ms.getStart(), ms.getFinish());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/run/dfs")
     public ResponseEntity<?> runDFS() {
-        if (mazeService.getMaze() == null) {
+        if (ms.getMaze() == null) {
             return mazeNotFound;
         }
-        int[][] board = mazeService.getBoard();
-        Coords start = mazeService.getStart();
-        Coords finish = mazeService.getFinish();
-        AlgorithmResult result = AlgorithmService.runDFS(board, start, finish);
+        AlgorithmResult result = AlgorithmService.runDFS(ms.getBoard(), ms.getStart(), ms.getFinish());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/run/dijkstra")
     public ResponseEntity<?> runDijkstra() {
-        if (mazeService.getMaze() == null) {
+        if (ms.getMaze() == null) {
             return mazeNotFound;
         }
-        int[][] board = mazeService.getBoard();
-        Coords start = mazeService.getStart();
-        Coords finish = mazeService.getFinish();
-        AlgorithmResult result = AlgorithmService.runDijkstra(board, start, finish);
+        AlgorithmResult result = AlgorithmService.runDijkstra(ms.getBoard(), ms.getStart(), ms.getFinish());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

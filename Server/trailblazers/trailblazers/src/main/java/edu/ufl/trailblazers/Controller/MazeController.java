@@ -60,7 +60,7 @@ public class MazeController {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        if (1 > presetID || presetID > 3) { // Valid presetIDs are 1, 2, 3, etc. Use setDefault() to set default maze.
+        if (presetID < 1 || presetID > 3) { // Valid presetIDs are 1, 2, 3, etc. Use setDefault() to set default maze.
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preset ID " + presetID + " does not exist");
         }
         mazeService.setPreset(presetID); // Sets the maze to a preset configuration with the passed-in ID.

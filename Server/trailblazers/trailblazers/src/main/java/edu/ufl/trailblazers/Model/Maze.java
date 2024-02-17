@@ -29,7 +29,8 @@ public class Maze {
                 start = MazeConfiguration.getPresetStart(presetID);
                 finish = MazeConfiguration.getPresetFinish(presetID);
             }
-            default -> throw new IllegalArgumentException(); // MazeController ensures passed-in presetID is 1-3.
+            default -> throw new IllegalArgumentException("Server Bug: Parameterized Maze constructor illegal " +
+                    "argument"); // MazeController ensures passed-in presetID is 1-3.
         }
     }
 
