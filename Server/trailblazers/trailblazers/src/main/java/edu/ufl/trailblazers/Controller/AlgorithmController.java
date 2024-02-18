@@ -1,7 +1,6 @@
 package edu.ufl.trailblazers.Controller;
 
 import edu.ufl.trailblazers.Model.AlgorithmResult;
-import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Service.AlgorithmService;
 import edu.ufl.trailblazers.Service.MazeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,39 +13,57 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/algorithm")
 public class AlgorithmController {
-    private final MazeService ms;
+    private final MazeService mazeService;
     private final ResponseEntity<String> mazeNotFound;
 
     @Autowired
     public AlgorithmController(MazeService mazeService) {
-        ms = mazeService;
+        this.mazeService = mazeService;
         mazeNotFound = ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized");
     }
 
     @GetMapping("/run/bfs")
     public ResponseEntity<?> runBFS() {
-        if (ms.getMaze() == null) {
+        if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        AlgorithmResult result = AlgorithmService.runBFS(ms.getBoard(), ms.getStart(), ms.getFinish());
+        AlgorithmResult result = AlgorithmService.runBFS(mazeService.getBoard(), mazeService.getStart());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/run/dfs")
     public ResponseEntity<?> runDFS() {
-        if (ms.getMaze() == null) {
+        if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        AlgorithmResult result = AlgorithmService.runDFS(ms.getBoard(), ms.getStart(), ms.getFinish());
+        AlgorithmResult result = AlgorithmService.runDFS(mazeService.getBoard(), mazeService.getStart());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/run/dijkstra")
     public ResponseEntity<?> runDijkstra() {
-        if (ms.getMaze() == null) {
+        if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        AlgorithmResult result = AlgorithmService.runDijkstra(ms.getBoard(), ms.getStart(), ms.getFinish());
+        AlgorithmResult result = AlgorithmService.runDijkstra(mazeService.getBoard(), mazeService.getStart());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/run/bellman-ford")
+    public ResponseEntity<?> runBellmanFord() {
+        if (mazeService.getMaze() == null) {
+            return mazeNotFound;
+        }
+        AlgorithmResult result = AlgorithmService.runBellmanFord(mazeService.getBoard(), mazeService.getStart());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/run/a-star")
+    public ResponseEntity<?> runAStar() {
+        if (mazeService.getMaze() == null) {
+            return mazeNotFound;
+        }
+        AlgorithmResult result = AlgorithmService.runAStar(mazeService.getBoard(), mazeService.getStart());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

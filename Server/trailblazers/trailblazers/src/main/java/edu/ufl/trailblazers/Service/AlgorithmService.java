@@ -13,7 +13,7 @@ import static edu.ufl.trailblazers.Model.CellType.*;
 @Service
 public class AlgorithmService {
     // Given a valid maze, find a path from start to finish using Breadth First Search.
-    public static AlgorithmResult runBFS(int[][] maze, Coords start, Coords finish) {
+    public static AlgorithmResult runBFS(int[][] maze, Coords start) {
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -47,7 +47,7 @@ public class AlgorithmService {
                         visitOrder.add(unvisitedNeighbor);
 
                         // If current neighbor is the finish...
-                        if (newRow == finish.row() && newCol == finish.col()) {
+                        if (maze[newRow][newCol] == FINISH.value) {
                             return new AlgorithmResult(true, visitOrder); // Complete path found.
                         }
 
@@ -64,7 +64,7 @@ public class AlgorithmService {
 
     // Given a valid maze, find a path from start to finish using Depth First Search. Same logic as BFS, but with a
     // stack instead of a queue.
-    public static AlgorithmResult runDFS(int[][] maze, Coords start, Coords finish) {
+    public static AlgorithmResult runDFS(int[][] maze, Coords start) {
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -91,7 +91,7 @@ public class AlgorithmService {
                         Coords unvisitedNeighbor = new Coords(newRow, newCol);
                         visitOrder.add(unvisitedNeighbor);
 
-                        if (newRow == finish.row() && newCol == finish.col()) {
+                        if (maze[newRow][newCol] == FINISH.value) {
                             return new AlgorithmResult(true, visitOrder);
                         }
 
@@ -105,7 +105,15 @@ public class AlgorithmService {
         return new AlgorithmResult(false, visitOrder);
     }
 
-    public static AlgorithmResult runDijkstra(int[][] maze, Coords start, Coords finish) {
+    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) {
         throw new UnsupportedOperationException(); // TODO: Code Dijkstra's algorithm.
+    }
+
+    public static AlgorithmResult runBellmanFord(int[][] maze, Coords start) {
+        throw new UnsupportedOperationException(); // TODO: Code Bellman-Ford algorithm.
+    }
+
+    public static AlgorithmResult runAStar(int[][] maze, Coords start) {
+        throw new UnsupportedOperationException(); // TODO: Code A* algorithm.
     }
 }
