@@ -22,7 +22,7 @@ public class AlgorithmController {
         mazeNotFound = ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized");
     }
 
-    @GetMapping("/run/bfs")
+    @GetMapping("/bfs")
     public ResponseEntity<?> runBFS() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -31,7 +31,7 @@ public class AlgorithmController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/run/dfs")
+    @GetMapping("/dfs")
     public ResponseEntity<?> runDFS() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -40,7 +40,7 @@ public class AlgorithmController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/run/dijkstra")
+    @GetMapping("/dijkstra")
     public ResponseEntity<?> runDijkstra() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -49,7 +49,7 @@ public class AlgorithmController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/run/bellman-ford")
+    @GetMapping("/bellman-ford")
     public ResponseEntity<?> runBellmanFord() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -58,7 +58,7 @@ public class AlgorithmController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/run/a-star")
+    @GetMapping("/a-star")
     public ResponseEntity<?> runAStar() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;

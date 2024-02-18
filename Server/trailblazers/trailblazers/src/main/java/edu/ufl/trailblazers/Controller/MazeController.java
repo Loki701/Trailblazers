@@ -20,7 +20,14 @@ public class MazeController {
         mazeNotFound = ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized");
     }
 
-    @PostMapping("/init/default-size")
+    /* NOTES:
+    * - A maze must be currently initialized with a POST request for any PUT, PATCH, GET, or DELETE request to work.
+    * - The only way to configure maze size is via POST /maze/size/default or POST /maze/size/custom.
+    * - Once a maze is initialized, there is no way to change its size unless DELETE /maze is called and a new maze is
+    * initialized.
+    */
+
+    @PostMapping("/size/default")
     public ResponseEntity<String> initDefaultSize() {
         if (mazeService.getMaze() != null) {
             return mazeFound;
@@ -32,7 +39,7 @@ public class MazeController {
                 " maze has been initialized");
     }
 
-    @PostMapping("/init/custom-size")
+    @PostMapping("/size/custom") // For testing purposes.
     public ResponseEntity<String> initCustomSize(@RequestParam int rowCount, @RequestParam int colCount) {
         if (mazeService.getMaze() != null) {
             return mazeFound;
@@ -45,7 +52,7 @@ public class MazeController {
                 " maze has been initialized");
     }
 
-    @PutMapping("/set/config/default")
+    @PutMapping("/config/default")
     public ResponseEntity<String> setDefaultConfig() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -55,7 +62,7 @@ public class MazeController {
                 mazeService.getRowCount() + "x" + mazeService.getColCount());
     }
 
-    @PutMapping("/set/config/preset")
+    @PutMapping("/config/preset")
     public ResponseEntity<String> setPresetConfig(@RequestParam int presetID) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -68,10 +75,14 @@ public class MazeController {
                 " with size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
     }
 
-    @PatchMapping("/edit/wall")
+    @PatchMapping("/wall")
     public ResponseEntity<String> editWall(@RequestParam int row, @RequestParam int col) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
+        }
+        if (!mazeService.isLocationValid(row, col)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
+                    " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
         if (mazeService.isStartCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot build a wall on the start cell");
@@ -92,10 +103,14 @@ public class MazeController {
                 col + ")");
     }
 
-    @PatchMapping("/edit/move/start")
+    @PatchMapping("/move/start")
     public ResponseEntity<String> moveStart(@RequestParam int row, @RequestParam int col) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
+        }
+        if (!mazeService.isLocationValid(row, col)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
+                    " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
         if (mazeService.isStartCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location is already a start cell");
@@ -105,10 +120,14 @@ public class MazeController {
                 ")");
     }
 
-    @PatchMapping("/edit/move/finish")
+    @PatchMapping("/move/finish")
     public ResponseEntity<String> moveFinish(@RequestParam int row, @RequestParam int col) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
+        }
+        if (!mazeService.isLocationValid(row, col)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
+                    " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
         if (mazeService.isFinishCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location is already a finish cell");
@@ -118,7 +137,7 @@ public class MazeController {
                 ")");
     }
 
-    @GetMapping("/get/board")
+    @GetMapping() // For testing purposes.
     public ResponseEntity<?> getBoard() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -127,7 +146,7 @@ public class MazeController {
         return ResponseEntity.status(HttpStatus.OK).body(board);
     }
 
-    @DeleteMapping("/delete/maze")
+    @DeleteMapping() // For testing purposes.
     public ResponseEntity<String> deleteMaze() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
