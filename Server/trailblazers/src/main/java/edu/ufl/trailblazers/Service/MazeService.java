@@ -58,8 +58,9 @@ public class MazeService {
         return maze.getStart();
     }
 
+    // Returns true if the passed-in location is out of bounds.
     public boolean isLocationInvalid(int row, int col) {
-        return row >= maze.getRowCount() || col >= maze.getColCount();
+        return row < 0 || row >= maze.getRowCount() || col < 0 || col >= maze.getColCount();
     }
 
     public boolean isStartCell(int row, int col) {
