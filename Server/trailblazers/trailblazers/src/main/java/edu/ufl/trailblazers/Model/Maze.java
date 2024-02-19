@@ -52,14 +52,14 @@ public class Maze {
 
     // Moves start to the passed-in location.
     public void moveStart(int row, int col) {
-        board[start.row()][start.row()] = EMPTY.value;
+        board[start.row()][start.col()] = EMPTY.value;
         board[row][col] = START.value;
         start = new Coords(row, col);
     }
 
     // Moves finish to the passed-in location.
     public void moveFinish(int row, int col) {
-        board[finish.row()][finish.row()] = EMPTY.value;
+        board[finish.row()][finish.col()] = EMPTY.value;
         board[row][col] = FINISH.value;
         finish = new Coords(row, col);
     }

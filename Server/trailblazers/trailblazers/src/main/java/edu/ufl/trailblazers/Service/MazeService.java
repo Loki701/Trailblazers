@@ -58,8 +58,8 @@ public class MazeService {
         return maze.getStart();
     }
 
-    public boolean isLocationValid(int row, int col) {
-        return row < maze.getRowCount() && col < maze.getColCount();
+    public boolean isLocationInvalid(int row, int col) {
+        return row >= maze.getRowCount() || col >= maze.getColCount();
     }
 
     public boolean isStartCell(int row, int col) {

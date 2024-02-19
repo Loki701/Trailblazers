@@ -21,6 +21,7 @@ public class MazeController {
     }
 
     /* NOTES:
+    * - Only one maze can be initialized at a time. Repeated POST requests will fail unless a DELETE request is made.
     * - A maze must be currently initialized with a POST request for any PUT, PATCH, GET, or DELETE request to work.
     * - The only way to configure maze size is via POST /maze/size/default or POST /maze/size/custom.
     * - Once a maze is initialized, there is no way to change its size unless DELETE /maze is called and a new maze is
@@ -80,7 +81,7 @@ public class MazeController {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        if (!mazeService.isLocationValid(row, col)) {
+        if (mazeService.isLocationInvalid(row, col)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
                     " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
@@ -108,7 +109,7 @@ public class MazeController {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        if (!mazeService.isLocationValid(row, col)) {
+        if (mazeService.isLocationInvalid(row, col)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
                     " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
@@ -125,7 +126,7 @@ public class MazeController {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
-        if (!mazeService.isLocationValid(row, col)) {
+        if (mazeService.isLocationInvalid(row, col)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
                     " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
