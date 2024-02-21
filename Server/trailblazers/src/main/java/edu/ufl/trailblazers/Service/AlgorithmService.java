@@ -4,7 +4,11 @@ import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Model.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -12,6 +16,19 @@ import static edu.ufl.trailblazers.Model.CellType.*;
 
 @Service
 public class AlgorithmService {
+
+    private static class Node implements Comparable<Node>{
+        int row, col, distance;
+        public Node(int row, int col, int distance){
+            this.row = row;
+            this.col = col;
+            this.distance = distance;
+        }
+        @Override
+        public int compareTo(Node other){
+            return Integer.compare(this.distance, other.distance);
+        }
+    }
     // Given a valid maze, find a path from start to finish using Breadth First Search.
     public static AlgorithmResult runBFS(int[][] maze, Coords start) {
         int rowCount = maze.length;
@@ -106,7 +123,45 @@ public class AlgorithmService {
     }
 
     public static AlgorithmResult runDijkstra(int[][] maze, Coords start) {
-        throw new UnsupportedOperationException(); // TODO: Code Dijkstra's algorithm.
+        int rowCount = maze.length, colCount = maze[0].length;
+        int [][] distance = new int[rowCount][colCount];
+        for(int[] row : distance) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        // Create a priority queue
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(start.row(), start.col(), 0));
+        distance[start.row()][start.col()] = 0;
+
+        Queue<Coords> visitedNodes = new LinkedList<>();
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        while (!pq.isEmpty()){
+            Node curr = pq.poll();
+            visitedNodes.add(new Coords(curr.row, curr.col));
+            if(curr.row == 2 && curr.col == 2){
+                // return curr.distance;
+                for(int i = 0; i < rowCount; i++){
+                    for(int j = 0; j < colCount; j++){
+                        System.out.print(distance[i][j] + " ");
+                    }
+                    System.out.println();
+                }   
+                return new AlgorithmResult(true, visitedNodes);
+            }
+            for(int[] dir : directions){
+                int newRow = curr.row + dir[0];
+                int newCol = curr.col + dir[1];
+                if(newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount){
+                    if(maze[newRow][newCol] != WALL.value && distance[newRow][newCol] > distance[curr.row][curr.col] + 1){
+                        distance[newRow][newCol] = distance[curr.row][curr.col] + 1;
+                        pq.add(new Node(newRow, newCol, distance[newRow][newCol]));
+                    }
+                }
+            }
+        }
+
+        return new AlgorithmResult(false, visitedNodes);
     }
 
     public static AlgorithmResult runBellmanFord(int[][] maze, Coords start) {
