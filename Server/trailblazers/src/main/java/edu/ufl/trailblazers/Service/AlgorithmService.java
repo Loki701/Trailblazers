@@ -4,10 +4,8 @@ import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Model.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
@@ -16,7 +14,6 @@ import static edu.ufl.trailblazers.Model.CellType.*;
 
 @Service
 public class AlgorithmService {
-
     private static class Node implements Comparable<Node>{
         int row, col, distance;
         public Node(int row, int col, int distance){
@@ -29,8 +26,9 @@ public class AlgorithmService {
             return Integer.compare(this.distance, other.distance);
         }
     }
+
     // Given a valid maze, find a path from start to finish using Breadth First Search.
-    public static AlgorithmResult runBFS(int[][] maze, Coords start) {
+    public static AlgorithmResult runBFS(int[][] maze, Coords start) { // TODO: Find shortest path with BFS.
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -43,7 +41,8 @@ public class AlgorithmService {
         Queue<Coords> bfsQ = new LinkedList<>();
         Queue<Coords> visitOrder = new LinkedList<>(); // Returned in TraversalResult.
 
-        // Start was found by isValidMaze().
+        // Begin BFS.
+        long startTime = System.nanoTime();
         bfsVisited[start.row()][start.col()] = true;
         bfsQ.add(start);
         visitOrder.add(start);
@@ -64,8 +63,9 @@ public class AlgorithmService {
                         visitOrder.add(unvisitedNeighbor);
 
                         // If current neighbor is the finish...
-                        if (maze[newRow][newCol] == FINISH.value) {
-                            return new AlgorithmResult(true, visitOrder); // Complete path found.
+                        if (maze[newRow][newCol] == FINISH.value) { // Complete path found.
+                            long executionTime = startTime - System.nanoTime();
+                            return new AlgorithmResult(true, executionTime, null, visitOrder);
                         }
 
                         bfsVisited[newRow][newCol] = true;
@@ -76,12 +76,13 @@ public class AlgorithmService {
         }
 
         // If bfsQ is empty and end isn't reached, maze can't be finished.
-        return new AlgorithmResult(false, visitOrder);
+        long executionTime = startTime - System.nanoTime();
+        return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
 
     // Given a valid maze, find a path from start to finish using Depth First Search. Same logic as BFS, but with a
     // stack instead of a queue.
-    public static AlgorithmResult runDFS(int[][] maze, Coords start) {
+    public static AlgorithmResult runDFS(int[][] maze, Coords start) { // TODO: Find shortest path with DFS.
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -92,6 +93,7 @@ public class AlgorithmService {
         Stack<Coords> dfsStk = new Stack<>();
         Queue<Coords> visitOrder = new LinkedList<>();
 
+        long startTime = System.nanoTime();
         dfsVisited[start.row()][start.col()] = true;
         dfsStk.push(start);
         visitOrder.add(start);
@@ -109,7 +111,8 @@ public class AlgorithmService {
                         visitOrder.add(unvisitedNeighbor);
 
                         if (maze[newRow][newCol] == FINISH.value) {
-                            return new AlgorithmResult(true, visitOrder);
+                            long executionTime = startTime - System.nanoTime();
+                            return new AlgorithmResult(true, executionTime, null, visitOrder);
                         }
 
                         dfsVisited[newRow][newCol] = true;
@@ -119,10 +122,11 @@ public class AlgorithmService {
             }
         }
 
-        return new AlgorithmResult(false, visitOrder);
+        long executionTime = startTime - System.nanoTime();
+        return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
 
-    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) {
+    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) { // TODO: Return executionTimeNano and shortestPath in AlgorithmResult.
         int rowCount = maze.length, colCount = maze[0].length;
         int [][] distance = new int[rowCount][colCount];
         for(int[] row : distance) {
