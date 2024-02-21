@@ -64,7 +64,7 @@ public class AlgorithmService {
 
                         // If current neighbor is the finish...
                         if (maze[newRow][newCol] == FINISH.value) { // Complete path found.
-                            long executionTime = startTime - System.nanoTime();
+                            long executionTime = System.nanoTime() - startTime;
                             return new AlgorithmResult(true, executionTime, null, visitOrder);
                         }
 
@@ -76,7 +76,7 @@ public class AlgorithmService {
         }
 
         // If bfsQ is empty and end isn't reached, maze can't be finished.
-        long executionTime = startTime - System.nanoTime();
+        long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
 
@@ -111,7 +111,7 @@ public class AlgorithmService {
                         visitOrder.add(unvisitedNeighbor);
 
                         if (maze[newRow][newCol] == FINISH.value) {
-                            long executionTime = startTime - System.nanoTime();
+                            long executionTime = System.nanoTime() - startTime;
                             return new AlgorithmResult(true, executionTime, null, visitOrder);
                         }
 
@@ -122,7 +122,7 @@ public class AlgorithmService {
             }
         }
 
-        long executionTime = startTime - System.nanoTime();
+        long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
 
@@ -150,7 +150,7 @@ public class AlgorithmService {
                         System.out.print(distance[i][j] + " ");
                     }
                     System.out.println();
-                }   
+                }
                 return new AlgorithmResult(true, visitedNodes);
             }
             for(int[] dir : directions){
