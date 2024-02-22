@@ -171,10 +171,10 @@ public class AlgorithmService {
                 Collections.reverse(shortestPath);
                 Queue<Coords> shortestPathQ = NodeListToCoordsQueue(shortestPath);
                 // Console log  shortest path q
-                for(Coords c : shortestPathQ){
-                    System.out.println(c.row() + "," + c.col());
-                    System.out.println();
-                }
+                // for(Coords c : shortestPathQ){
+                //     System.out.println(c.row() + "," + c.col());
+                //     System.out.println();
+                // }
                 return new AlgorithmResult(true, executionTime, shortestPathQ,  visitedNodes);
             }
             for(int[] dir : directions){
