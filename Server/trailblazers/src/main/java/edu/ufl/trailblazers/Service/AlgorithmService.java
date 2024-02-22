@@ -129,6 +129,8 @@ public class AlgorithmService {
     public static AlgorithmResult runDijkstra(int[][] maze, Coords start) { // TODO: Return executionTimeNano and shortestPath in AlgorithmResult.
         int rowCount = maze.length, colCount = maze[0].length;
         int [][] distance = new int[rowCount][colCount];
+
+        long startTime = System.nanoTime();
         for(int[] row : distance) {
             Arrays.fill(row, Integer.MAX_VALUE);
         }
@@ -143,7 +145,7 @@ public class AlgorithmService {
         while (!pq.isEmpty()){
             Node curr = pq.poll();
             visitedNodes.add(new Coords(curr.row, curr.col));
-            if(curr.row == 2 && curr.col == 2){
+            if(maze[curr.row][curr.col] == FINISH.value){
                 // return curr.distance;
                 for(int i = 0; i < rowCount; i++){
                     for(int j = 0; j < colCount; j++){
@@ -151,7 +153,8 @@ public class AlgorithmService {
                     }
                     System.out.println();
                 }
-                return new AlgorithmResult(true, visitedNodes);
+                long executionTime = System.nanoTime() - startTime;
+                return new AlgorithmResult(true, executionTime, null,  visitedNodes);
             }
             for(int[] dir : directions){
                 int newRow = curr.row + dir[0];
@@ -164,8 +167,9 @@ public class AlgorithmService {
                 }
             }
         }
+        long executionTime = System.nanoTime() - startTime;
 
-        return new AlgorithmResult(false, visitedNodes);
+        return new AlgorithmResult(false, executionTime, null, visitedNodes);
     }
 
     public static AlgorithmResult runBellmanFord(int[][] maze, Coords start) {
