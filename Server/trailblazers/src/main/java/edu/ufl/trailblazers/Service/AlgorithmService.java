@@ -4,8 +4,11 @@ import edu.ufl.trailblazers.Model.Coords;
 import edu.ufl.trailblazers.Model.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
@@ -125,7 +128,13 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
-
+    private static Queue<Coords> NodeListToCoordsQueue(List<Node> nodeList){
+        Queue<Coords> coordsQueue = new LinkedList<>();
+        for(Node node : nodeList){
+            coordsQueue.add(new Coords(node.row, node.col));
+        }
+        return coordsQueue;
+    }
     public static AlgorithmResult runDijkstra(int[][] maze, Coords start) { // TODO: Return executionTimeNano and shortestPath in AlgorithmResult.
         int rowCount = maze.length, colCount = maze[0].length;
         int [][] distance = new int[rowCount][colCount];
@@ -136,6 +145,7 @@ public class AlgorithmService {
         }
         // Create a priority queue
         PriorityQueue<Node> pq = new PriorityQueue<>();
+        Node[][] parent = new Node[rowCount][colCount];
         pq.add(new Node(start.row(), start.col(), 0));
         distance[start.row()][start.col()] = 0;
 
@@ -146,15 +156,21 @@ public class AlgorithmService {
             Node curr = pq.poll();
             visitedNodes.add(new Coords(curr.row, curr.col));
             if(maze[curr.row][curr.col] == FINISH.value){
-                // return curr.distance;
-                for(int i = 0; i < rowCount; i++){
-                    for(int j = 0; j < colCount; j++){
-                        System.out.print(distance[i][j] + " ");
-                    }
-                    System.out.println();
-                }
+                // for(int i = 0; i < rowCount; i++){
+                //     for(int j = 0; j < colCount; j++){
+                //         System.out.print(distance[i][j] + " ");
+                //     }
+                //     System.out.println();
+                // }
                 long executionTime = System.nanoTime() - startTime;
-                return new AlgorithmResult(true, executionTime, null,  visitedNodes);
+                List<Node> shortestPath = new ArrayList<>();
+                while (curr != null) {
+                    shortestPath.add(curr);
+                    curr = parent[curr.row][curr.col];
+                }
+                Collections.reverse(shortestPath);
+                Queue<Coords> shortestPathQ = NodeListToCoordsQueue(shortestPath);
+                return new AlgorithmResult(true, executionTime, shortestPathQ,  visitedNodes);
             }
             for(int[] dir : directions){
                 int newRow = curr.row + dir[0];
@@ -162,6 +178,7 @@ public class AlgorithmService {
                 if(newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount){
                     if(maze[newRow][newCol] != WALL.value && distance[newRow][newCol] > distance[curr.row][curr.col] + 1){
                         distance[newRow][newCol] = distance[curr.row][curr.col] + 1;
+                        parent[newRow][newCol] = curr;
                         pq.add(new Node(newRow, newCol, distance[newRow][newCol]));
                     }
                 }
