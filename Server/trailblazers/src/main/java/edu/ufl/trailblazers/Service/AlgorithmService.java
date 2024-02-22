@@ -29,6 +29,13 @@ public class AlgorithmService {
             return Integer.compare(this.distance, other.distance);
         }
     }
+    private static Queue<Coords> NodeListToCoordsQueue(List<Node> nodeList){
+        Queue<Coords> coordsQueue = new LinkedList<>();
+        for(Node node : nodeList){
+            coordsQueue.add(new Coords(node.row, node.col));
+        }
+        return coordsQueue;
+    }
 
     // Given a valid maze, find a path from start to finish using Breadth First Search.
     public static AlgorithmResult runBFS(int[][] maze, Coords start) { // TODO: Find shortest path with BFS.
@@ -128,14 +135,7 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
-    private static Queue<Coords> NodeListToCoordsQueue(List<Node> nodeList){
-        Queue<Coords> coordsQueue = new LinkedList<>();
-        for(Node node : nodeList){
-            coordsQueue.add(new Coords(node.row, node.col));
-        }
-        return coordsQueue;
-    }
-    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) { // TODO: Return executionTimeNano and shortestPath in AlgorithmResult.
+    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) { // TODO:
         int rowCount = maze.length, colCount = maze[0].length;
         int [][] distance = new int[rowCount][colCount];
 
@@ -170,6 +170,11 @@ public class AlgorithmService {
                 }
                 Collections.reverse(shortestPath);
                 Queue<Coords> shortestPathQ = NodeListToCoordsQueue(shortestPath);
+                // Console log  shortest path q
+                for(Coords c : shortestPathQ){
+                    System.out.println(c.row() + "," + c.col());
+                    System.out.println();
+                }
                 return new AlgorithmResult(true, executionTime, shortestPathQ,  visitedNodes);
             }
             for(int[] dir : directions){
