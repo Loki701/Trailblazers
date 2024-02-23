@@ -3,7 +3,7 @@ import Tile from "./Tile";
 
 const Table = () => {
   const [tiles, setTiles] = useState(
-    Array.from({ length: 48 * 48 }, () => false)
+    Array.from({ length: 38 * 38 }, () => false)
   );
   const [isMouseDown, setIsMouseDown] = useState(false);
 
