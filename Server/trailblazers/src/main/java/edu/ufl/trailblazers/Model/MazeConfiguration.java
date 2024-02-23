@@ -6,19 +6,19 @@ public class MazeConfiguration {
     private static final Coords preset1Finish, preset2Finish, preset3Finish;
 
     static { // TODO: Design the preset maze boards and set the starts and finishes.
-        int presetHeight = 48;
-        int presetWidth = 48;
+        int presetHeight = DefaultMazeSize.HEIGHT.value;
+        int presetWidth = DefaultMazeSize.WIDTH.value;
         preset1Board = new int[presetHeight][presetWidth];
         preset1Start = new Coords(0, 0);
-        preset1Finish = new Coords(47, 47);
+        preset1Finish = new Coords(presetHeight - 1, presetWidth - 1);
 
         preset2Board = new int[presetHeight][presetWidth];
         preset2Start = new Coords(0, 0);
-        preset2Finish = new Coords(47, 47);
+        preset2Finish = new Coords(presetHeight - 1, presetWidth - 1);
 
         preset3Board = new int[presetHeight][presetWidth];
         preset3Start = new Coords(0, 0);
-        preset3Finish = new Coords(47, 47);
+        preset3Finish = new Coords(presetHeight - 1, presetWidth - 1);
     }
 
     // Given a valid presetID, return the corresponding board layout.

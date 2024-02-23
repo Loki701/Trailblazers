@@ -1,5 +1,6 @@
 package edu.ufl.trailblazers.Controller;
 
+import edu.ufl.trailblazers.Model.DefaultMazeSize;
 import edu.ufl.trailblazers.Service.MazeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,8 @@ public class MazeController {
         if (mazeService.getMaze() != null) {
             return mazeFound;
         }
-        int defaultRowCount = 35;
-        int defaultColCount = 35;
+        int defaultRowCount = DefaultMazeSize.HEIGHT.value;
+        int defaultColCount = DefaultMazeSize.WIDTH.value;
         mazeService.initialize(defaultRowCount, defaultColCount); // Default maze dimensions.
         return ResponseEntity.status(HttpStatus.CREATED).body("" + defaultRowCount + "x" + defaultColCount +
                 " maze has been initialized");
