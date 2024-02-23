@@ -21,6 +21,10 @@ public class MazeController {
         mazeNotFound = ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized");
     }
 
+    private String stringifyCoords(int row, int col) {
+        return "(" + row + "," + col + ")";
+    }
+
     /* NOTES:
     * - Only one maze can be initialized at a time. Repeated POST requests will fail unless a DELETE request is made.
     * - A maze must be currently initialized with a POST request for any PUT, PATCH, GET, or DELETE request to work.
@@ -83,14 +87,16 @@ public class MazeController {
             return mazeNotFound;
         }
         if (mazeService.isLocationInvalid(row, col)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
-                    " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location " + stringifyCoords(row, col) +
+                    " is invalid for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
         if (mazeService.isStartCell(row, col)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot build a wall on the start cell");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot build a wall at location " +
+                    stringifyCoords(row, col) + " because it contains the start cell");
         }
         if (mazeService.isFinishCell(row, col)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot build a wall on the finish cell");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot build a wall at location " +
+                    stringifyCoords(row, col) + " because it contains the finish cell");
         }
         boolean wallWasBuilt = mazeService.editWall(row, col); // Flips wall status of the cell at this location.
 
@@ -101,8 +107,8 @@ public class MazeController {
         else {
             wallStatus = "destroyed";
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Wall has been " + wallStatus + " at location (" + row + "," +
-                col + ")");
+        return ResponseEntity.status(HttpStatus.OK).body("Wall has been " + wallStatus + " at location " +
+                stringifyCoords(row, col));
     }
 
     @PatchMapping("/move/start")
@@ -111,15 +117,25 @@ public class MazeController {
             return mazeNotFound;
         }
         if (mazeService.isLocationInvalid(row, col)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
-                    " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location " + stringifyCoords(row, col) +
+                    " is invalid for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
         if (mazeService.isStartCell(row, col)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Location is already a start cell");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
+                    " is already a start cell");
         }
+        if (mazeService.isFinishCell(row, col)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
+                    " cannot be overwritten because it contains the finish cell");
+        }
+
+        int prevStartRow = mazeService.getStart().row();
+        int prevStartCol = mazeService.getStart().col();
         mazeService.moveStart(row, col); // Moves the start cell from the previous location to this location.
-        return ResponseEntity.status(HttpStatus.OK).body("Start cell has been moved to location (" + row + "," + col +
-                ")");
+
+        return ResponseEntity.status(HttpStatus.OK).body("Start cell has been moved to location " +
+                stringifyCoords(row, col) + ", and location " + stringifyCoords(prevStartRow, prevStartCol) +
+                " is now empty");
     }
 
     @PatchMapping("/move/finish")
@@ -128,15 +144,25 @@ public class MazeController {
             return mazeNotFound;
         }
         if (mazeService.isLocationInvalid(row, col)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location (" + row + "," + col + ") is invalid" +
-                    " for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location " + stringifyCoords(row, col) +
+                    " is invalid for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount());
         }
         if (mazeService.isFinishCell(row, col)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Location is already a finish cell");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
+                    " is already a finish cell");
         }
+        if (mazeService.isStartCell(row, col)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
+                    " cannot be overwritten because it contains the start cell");
+        }
+
+        int prevFinishRow = mazeService.getFinish().row();
+        int prevFinishCol = mazeService.getFinish().col();
         mazeService.moveFinish(row, col); // Moves the finish cell from the previous location to this location.
-        return ResponseEntity.status(HttpStatus.OK).body("Finish cell has been moved to location (" + row + "," + col +
-                ")");
+
+        return ResponseEntity.status(HttpStatus.OK).body("Finish cell has been moved to location " +
+                stringifyCoords(row, col) + ", and location " + stringifyCoords(prevFinishRow, prevFinishCol) +
+                " is now empty");
     }
 
     @GetMapping() // For testing purposes.
