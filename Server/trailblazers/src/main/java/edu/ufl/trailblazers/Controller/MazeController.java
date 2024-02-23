@@ -33,8 +33,8 @@ public class MazeController {
         if (mazeService.getMaze() != null) {
             return mazeFound;
         }
-        int defaultRowCount = 48;
-        int defaultColCount = 48;
+        int defaultRowCount = 35;
+        int defaultColCount = 35;
         mazeService.initialize(defaultRowCount, defaultColCount); // Default maze dimensions.
         return ResponseEntity.status(HttpStatus.CREATED).body("" + defaultRowCount + "x" + defaultColCount +
                 " maze has been initialized");
