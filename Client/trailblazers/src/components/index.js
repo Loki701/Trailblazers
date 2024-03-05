@@ -1,12 +1,13 @@
 import AboutUs from "./AboutUs";
 import { Algorithm } from "./Algorithm";
 import { Community } from "./Community";
-import Home from "./Home";
+import Home from "./home/Home";
 import { MiniGames } from "./MiniGames";
-import Navbar from "./Navbar";
 import { Resources } from "./Resources";
-import Table from "./Table";
+import Table from "./table/Table";
 import Tile from "./Tile";
 
+import Header from "./header/Header";
 
-export {AboutUs, Algorithm, Community, Home, MiniGames, Navbar, Resources, Table, Tile}
+
+export {Header, AboutUs, Algorithm, Community, Home, MiniGames, Resources, Table, Tile}

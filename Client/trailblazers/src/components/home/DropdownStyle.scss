@@ -1,0 +1,239 @@
+.home .dropdown-algo{
+    position: relative;
+    width: 200px;
+    filter: url(#goo);
+  
+    &__face,
+    &__items {
+      background-color: var(--primary-color);
+      padding: 17px;
+      border-radius: 25px;
+      // border: 1px solid #000;
+    }
+    &__face:hover,
+    &__items:hover{
+      cursor: pointer;
+    }
+    &__items:hover {
+      top: calc(100% + 25px);
+      visibility: visible;
+      opacity: 1;
+    }
+  
+    &__face {
+      display: block;
+      position: relative;
+    }
+  
+    &__items {
+      margin: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      list-style-type: none;
+      display: flex;
+      justify-content: space-between;
+      visibility: hidden;
+      z-index: -1;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
+  
+      &::before {
+        content: "";
+        background-color: var(--primary-color);
+        position: absolute;
+        bottom: 100%;
+        right: 20%;
+        height: 40px;
+        width: 20px;
+      }
+    }
+  
+    &__arrow {
+      border-bottom: 2px solid #000;
+      border-right: 2px solid #000;
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg) translateY(-50%);
+      transform-origin: right;
+    }
+  
+    input {
+      display: none;
+  
+      &:hover ~ .dropdown-algo__items {
+        top: calc(100% + 25px);
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  .home .dropdown-pace {
+    position: relative;
+    width: 200px;
+    filter: url(#goo);
+  
+    &__face,
+    &__items {
+      background-color: var(--primary-color);
+      padding: 17px;
+      border-radius: 25px;
+    }
+    &__face:hover{
+      cursor: pointer;
+    }
+    &__items:hover {
+      cursor: pointer;
+    top: calc(100% + 25px);
+    visibility: visible;
+    opacity: 1;
+  }
+  
+    &__face {
+      display: block;
+      position: relative;
+    }
+  
+    &__items {
+      margin: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      list-style-type: none;
+      display: flex;
+      justify-content: space-between;
+      visibility: hidden;
+      z-index: -1;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
+  
+      &::before {
+        content: "";
+        background-color: var(--primary-color);
+        position: absolute;
+        bottom: 100%;
+        right: 20%;
+        height: 40px;
+        width: 20px;
+      }
+    }
+  
+    &__arrow {
+      border-bottom: 2px solid #000;
+      border-right: 2px solid #000;
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg) translateY(-50%);
+      transform-origin: right;
+    }
+  
+    input {
+      display: none;
+  
+      &:hover ~ .dropdown-pace__items {
+        top: calc(100% + 25px);
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  .home .dropdown-maze{
+    position: relative;
+    width: 200px;
+    filter: url(#goo);
+  
+    &__face,
+    &__items {
+      background-color: var(--primary-color);
+      padding: 17px;
+      // border: 1px solid #000;
+      border-radius: 25px;
+      // color: white;
+    }
+    &__face:hover{
+      cursor: pointer;
+    }
+
+    &__items:hover{
+      cursor: pointer;
+      top: calc(100% + 25px);
+        visibility: visible;
+        opacity: 1;
+    }
+
+  
+    &__face {
+      display: block;
+      position: relative;
+    }
+  
+    &__items {
+      margin: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      list-style-type: none;
+      display: flex;
+      justify-content: space-between;
+      visibility: hidden;
+      z-index: -1;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
+  
+      &::before {
+        content: "";
+        background-color: var(--primary-color);
+        position: absolute;
+        bottom: 100%;
+        right: 20%;
+        height: 40px;
+        width: 20px;
+      }
+    }
+  
+    &__arrow {
+      border-bottom: 2px solid #000;
+      border-right: 2px solid #000;
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg) translateY(-50%);
+      transform-origin: right;
+    }
+  
+    input {
+      display: none;
+  
+      &:hover ~ .dropdown-maze__items {
+        top: calc(100% + 25px);
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  svg {
+    display: none;
+  }

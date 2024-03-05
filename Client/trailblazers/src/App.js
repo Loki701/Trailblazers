@@ -4,7 +4,7 @@ import {
    Routes, BrowserRouter
 } from "react-router-dom";
 
-import { Algorithm, Community, MiniGames, Resources, Navbar, AboutUs, Home } from './components';
+import { Header, Algorithm, Community, MiniGames, Resources, AboutUs, Home } from './components';
 
 import { StateProvider } from './context/StateContext';
 import reducer, {initialState} from './context/StateReducers';
@@ -15,7 +15,7 @@ function App() {
     <BrowserRouter>
     <div className="App">
 
-      <Navbar />
+      <Header/>
     
       <Routes>
         <Route path="/" element={<Home/>}/>

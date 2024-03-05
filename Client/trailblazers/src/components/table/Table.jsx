@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext, StateContext } from "react";
-import Tile from "./Tile";
+import Tile from "../Tile";
+import "./Table.css";
 
 const Table = () => {
   const [tiles, setTiles] = useState(
-    Array.from({ length: 38 * 38 }, () => false)
+    Array.from({ length: 30 * 20 }, () => false)
   );
   const [isMouseDown, setIsMouseDown] = useState(false);
 

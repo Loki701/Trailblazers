@@ -1,0 +1,12 @@
+.table {
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+.table .grid {
+    width:fit-content;
+    display: grid;
+    grid-template-columns: repeat(30, 15px);
+    gap: 1px;
+    background-color: var(--color-1);
+}
