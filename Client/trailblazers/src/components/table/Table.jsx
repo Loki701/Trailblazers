@@ -1,10 +1,18 @@
 import { useState, useEffect, useContext, StateContext } from "react";
-import Tile from "../Tile";
+import Tile from "../tile/Tile";
 import "./Table.css";
 
 const Table = () => {
   const [tiles, setTiles] = useState(
-    Array.from({ length: 30 * 20 }, () => false)
+    Array.from({ length: 30 * 20 }, (_, index) => {
+      if(index === 0){
+        return 2;
+      } else if (index === 30*20-1){
+        return 3;
+      }else{
+        return 0;
+      }
+    })
   );
   const [isMouseDown, setIsMouseDown] = useState(false);
 
@@ -24,8 +32,15 @@ const Table = () => {
   };
 
   const handleTileClick = (index) => {
+    if (tiles[index] === 2 || tiles[index] === 3) {
+      return;
+    }
     const newTiles = [...tiles];
-    newTiles[index] = !tiles[index]; // Change the color to black (you can modify this as needed)
+    if (newTiles[index] === 1) {
+      newTiles[index] = 0; // Change the color to white (you can modify this as needed)
+    } else {
+      newTiles[index] = 1; // Change the color to black (you can modify this as needed)
+    }
     setTiles(newTiles);
   };
 

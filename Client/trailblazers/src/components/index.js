@@ -5,7 +5,7 @@ import Home from "./home/Home";
 import { MiniGames } from "./MiniGames";
 import { Resources } from "./Resources";
 import Table from "./table/Table";
-import Tile from "./Tile";
+import Tile from "./tile/Tile";
 
 import Header from "./header/Header";
 

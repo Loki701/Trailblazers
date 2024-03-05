@@ -1,0 +1,17 @@
+.tile {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: var(--bg-color);
+}
+.tile.active {
+    animation: 3s multicolor;
+    background-color: var(--color-3);
+}
+.tile.start {
+    background-color: green;
+}
+.tile.end {
+    background-color: red;
+}

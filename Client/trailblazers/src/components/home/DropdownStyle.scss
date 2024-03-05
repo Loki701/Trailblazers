@@ -10,14 +10,18 @@
       border-radius: 25px;
       // border: 1px solid #000;
     }
-    &__face:hover,
-    &__items:hover{
+    &__face:hover{
       cursor: pointer;
     }
     &__items:hover {
       top: calc(100% + 25px);
       visibility: visible;
       opacity: 1;
+    }
+    
+    &__items:active{
+      // visibility: none;
+      // display: none;
     }
   
     &__face {
@@ -52,7 +56,14 @@
         width: 20px;
       }
     }
-  
+    &__items li{
+      // border-bottom: 1px solid #000;
+      transition: 1s;
+    }
+    &__items li:hover{
+      cursor: pointer;
+      scale: 1.02;
+    }
     &__arrow {
       border-bottom: 2px solid #000;
       border-right: 2px solid #000;
@@ -91,7 +102,6 @@
       cursor: pointer;
     }
     &__items:hover {
-      cursor: pointer;
     top: calc(100% + 25px);
     visibility: visible;
     opacity: 1;
@@ -128,6 +138,16 @@
         height: 40px;
         width: 20px;
       }
+    }
+    &__items li{
+      transition: 1s;
+    }
+    &__items li:hover{
+      cursor: pointer;
+      // color: var(--primary-color);
+      scale: 1.02;
+      // font-size: 10px;
+      // font-weight: 800;
     }
   
     &__arrow {
@@ -171,12 +191,20 @@
     }
 
     &__items:hover{
-      cursor: pointer;
       top: calc(100% + 25px);
         visibility: visible;
         opacity: 1;
     }
-
+    &__items li{
+      transition: 1s;
+    }
+    &__items li:hover{
+      cursor: pointer;
+      // color: var(--primary-color);
+      scale: 1.02;
+      // font-size: 10px;
+      // font-weight: 800;
+    }
   
     &__face {
       display: block;

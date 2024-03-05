@@ -40,10 +40,20 @@
     margin-left: 1rem;
     border-radius: 25px;
     background-color: var(--primary-color);
+    transition: 1s;
+}
+.play-button .material-symbols-outlined{
+    color: var(--black);
+    transition: 1s;
 }
 .play-button:hover{
     cursor: pointer;
+    background-color: var(--color-1);
 }
+/* .play-button:hover .material-symbols-outlined{
+    color: var(--primary-color);
+    weight: 700;
+} */
 .algorithm-info{
     margin-left: 3rem;
     margin-right: 2rem;

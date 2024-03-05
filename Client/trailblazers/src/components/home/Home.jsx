@@ -6,6 +6,55 @@ import "./DropdownStyle.scss";
 const Home = () => {
 
   const [playStatus, setPlayStatus] = useState(true);
+  const [algoSelState, setAlgoSelState] = useState(null);
+  const [currentAlgo, setCurrentAlgo] = useState("Algorithm"); 
+  const [paceSelState, setPaceSelState] = useState(null);
+  const [currentPace, setCurrentPace] = useState("Pace");
+  const [mazeSelState, setMazeSelState] = useState(null);
+  const [currentMaze, setCurrentMaze] = useState("Maze");
+
+  const handleSelectorClick = (selector) =>{
+    switch(selector){
+      case "algo":
+        setAlgoSelState(!algoSelState);
+        break;
+      case "pace":
+        setPaceSelState(!paceSelState);
+        break;
+      case "maze":
+        setMazeSelState(!mazeSelState);
+        break;
+      default:
+        break;
+    }
+  }
+  const handleCurrentOnClick = (selector, value) =>{
+    switch(selector){
+      case "algo":
+        setCurrentAlgo(value);
+        break;
+      case "pace":
+        setCurrentPace(value);
+        break;
+      case "maze":
+        setCurrentMaze(value);
+        break;
+      default:
+        break;
+    }
+  }
+  const handlePlayClick = () =>{
+    if ( currentMaze !== "Maze" && currentAlgo !== "Algorithm" && currentPace !== "Pace"){
+      setPlayStatus(!playStatus);
+    }
+    else{
+      console.log("Please select an algorithm, pace and maze");
+    }
+
+    // Add logic to start the algorithm
+
+    //Add logic to replay the algorithm
+  }
 
   return (
     <div className="home">
@@ -16,43 +65,37 @@ const Home = () => {
         <div className="dropdown-algo">
           <input type="checkbox" id="dropdown-algo" />
           <label className="dropdown-algo__face" for="dropdown-algo">
-            <div className="dropdown-algo__text">Algorithm</div>
+            <div className="dropdown-algo__text">{currentAlgo}</div>
             <div className="dropdown-algo__arrow"></div>
           </label>
           <ul className="dropdown-algo__items">
-            <li>Algo 1</li>
-            <li>Algo 2</li>
-            <li>Algo 3</li>
-            <li>Algo 4</li>
-            <li>Algo 5</li>
+            <li onClick={() => handleCurrentOnClick("algo","BFS")}>BFS</li>
+            <li onClick={() => handleCurrentOnClick("algo","DFS")}>DFS</li>
+            <li onClick={() => handleCurrentOnClick("algo","Dijkstra")}>Dijkstra</li>
+            <li onClick={() => handleCurrentOnClick("algo","A*")}>A*</li>
+            <li onClick={() => handleCurrentOnClick("algo","Dijkstra")}>Bell ...</li>
           </ul>
         </div>
         <div className="dropdown-pace">
           <input type="checkbox" id="dropdown-pace" />
           <label className="dropdown-pace__face" for="dropdown-pace">
-            <div className="dropdown-pace__text">Pace</div>
+            <div className="dropdown-pace__text">{currentPace}</div>
             <div className="dropdown-pace__arrow"></div>
           </label>
           <ul className="dropdown-pace__items">
-            <li>Pace 1</li>
-            <li>Pace 2</li>
-            <li>Pace 3</li>
-            <li>Pace 4</li>
-            <li>Pace 5</li>
+            <li onClick={() => handleCurrentOnClick("pace","x.5")}>x.5</li>
+            <li onClick={() => handleCurrentOnClick("pace","Actual")}>Actual</li>
+            <li onClick={() => handleCurrentOnClick("pace","x2")}>x2</li>
           </ul>
         </div>
         <div className="dropdown-maze">
           <input type="checkbox" id="dropdown-maze" />
           <label className="dropdown-maze__face" for="dropdown-maze">
-            <div className="dropdown-maze__text">Maze</div>
+            <div className="dropdown-maze__text">{currentMaze}</div>
             <div className="dropdown-maze__arrow"></div>
           </label>
           <ul className="dropdown-maze__items">
-            <li>Maze 1</li>
-            <li>Maze 2</li>
-            <li>Maze 3</li>
-            <li>Maze 4</li>
-            <li>Maze 5</li>
+            <li onClick={() => handleCurrentOnClick("maze","Custom Maze")}>Custom Maze</li>
           </ul>
         </div>
       </div>
@@ -66,7 +109,7 @@ const Home = () => {
       <div className="home-content">
         <div className="table-container">
           <Table />
-          <div className="play-button">
+          <div className="play-button" onClick={handlePlayClick}>
             {playStatus ? (
               <span class="material-symbols-outlined">
                 play_arrow
