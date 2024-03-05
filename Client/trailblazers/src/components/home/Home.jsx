@@ -1,35 +1,21 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Table from "../table/Table";
 import "./Home.css";
 import "./DropdownStyle.scss";
 
+
+import axios from "../../api/axios";
+
 const Home = () => {
 
   const [playStatus, setPlayStatus] = useState(true);
-  const [algoSelState, setAlgoSelState] = useState(null);
-  const [currentAlgo, setCurrentAlgo] = useState("Algorithm"); 
-  const [paceSelState, setPaceSelState] = useState(null);
+  const [currentAlgo, setCurrentAlgo] = useState("Algorithm");
   const [currentPace, setCurrentPace] = useState("Pace");
-  const [mazeSelState, setMazeSelState] = useState(null);
   const [currentMaze, setCurrentMaze] = useState("Maze");
+  const [visualizationResult, setVisualizationResult] = useState(null);
 
-  const handleSelectorClick = (selector) =>{
-    switch(selector){
-      case "algo":
-        setAlgoSelState(!algoSelState);
-        break;
-      case "pace":
-        setPaceSelState(!paceSelState);
-        break;
-      case "maze":
-        setMazeSelState(!mazeSelState);
-        break;
-      default:
-        break;
-    }
-  }
-  const handleCurrentOnClick = (selector, value) =>{
-    switch(selector){
+  const handleCurrentOnClick = (selector, value) => {
+    switch (selector) {
       case "algo":
         setCurrentAlgo(value);
         break;
@@ -43,19 +29,48 @@ const Home = () => {
         break;
     }
   }
-  const handlePlayClick = () =>{
-    if ( currentMaze !== "Maze" && currentAlgo !== "Algorithm" && currentPace !== "Pace"){
-      setPlayStatus(!playStatus);
+  const handlePlayClick = () => {
+    if (currentMaze !== "Maze" && currentAlgo !== "Algorithm" && currentPace !== "Pace") {
+      try {
+        const response = axios.post("/api/algorithm",
+          JSON.stringify({ currentAlgo, currentPace, currentMaze }),
+          {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+          }
+        );
+        if (response.isCompletable === true) {
+          setVisualizationResult(response);
+          setPlayStatus(!playStatus);
+        }else{
+          // let user know its not completable
+        }
+      } catch (err) {
+        if (!err?.response) {
+          // setErrMsg('No Server Response');
+        } else if (err.response?.status === 400) {
+          // setErrMsg('Incorrect Username or Password');
+        } else if (err.response?.status === 401) {
+          // setErrMsg('Unauthorized');
+        } else {
+          // setErrMsg('Login Failed');
+        }
+      }
+
     }
-    else{
+    else {
       console.log("Please select an algorithm, pace and maze");
     }
-
-    // Add logic to start the algorithm
-
-    //Add logic to replay the algorithm
+  }
+  const startVisualization = () => {
+    // Start the visualization
   }
 
+  useEffect(() => {
+    if (visualizationResult !== null) {
+      startVisualization();
+    }
+  }, [visualizationResult])
   return (
     <div className="home">
       <div className="home-header">
@@ -69,11 +84,11 @@ const Home = () => {
             <div className="dropdown-algo__arrow"></div>
           </label>
           <ul className="dropdown-algo__items">
-            <li onClick={() => handleCurrentOnClick("algo","BFS")}>BFS</li>
-            <li onClick={() => handleCurrentOnClick("algo","DFS")}>DFS</li>
-            <li onClick={() => handleCurrentOnClick("algo","Dijkstra")}>Dijkstra</li>
-            <li onClick={() => handleCurrentOnClick("algo","A*")}>A*</li>
-            <li onClick={() => handleCurrentOnClick("algo","Dijkstra")}>Bell ...</li>
+            <li onClick={() => handleCurrentOnClick("algo", "BFS")}>BFS</li>
+            <li onClick={() => handleCurrentOnClick("algo", "DFS")}>DFS</li>
+            <li onClick={() => handleCurrentOnClick("algo", "Dijkstra")}>Dijkstra</li>
+            <li onClick={() => handleCurrentOnClick("algo", "A*")}>A*</li>
+            <li onClick={() => handleCurrentOnClick("algo", "Dijkstra")}>Bell ...</li>
           </ul>
         </div>
         <div className="dropdown-pace">
@@ -83,9 +98,9 @@ const Home = () => {
             <div className="dropdown-pace__arrow"></div>
           </label>
           <ul className="dropdown-pace__items">
-            <li onClick={() => handleCurrentOnClick("pace","x.5")}>x.5</li>
-            <li onClick={() => handleCurrentOnClick("pace","Actual")}>Actual</li>
-            <li onClick={() => handleCurrentOnClick("pace","x2")}>x2</li>
+            <li onClick={() => handleCurrentOnClick("pace", "x.5")}>x.5</li>
+            <li onClick={() => handleCurrentOnClick("pace", "Actual")}>Actual</li>
+            <li onClick={() => handleCurrentOnClick("pace", "x2")}>x2</li>
           </ul>
         </div>
         <div className="dropdown-maze">
@@ -95,7 +110,7 @@ const Home = () => {
             <div className="dropdown-maze__arrow"></div>
           </label>
           <ul className="dropdown-maze__items">
-            <li onClick={() => handleCurrentOnClick("maze","Custom Maze")}>Custom Maze</li>
+            <li onClick={() => handleCurrentOnClick("maze", "Custom Maze")}>Custom Maze</li>
           </ul>
         </div>
       </div>
@@ -122,7 +137,7 @@ const Home = () => {
           </div>
         </div>
         <div className="algorithm-info">
-          <h2>Dijstram</h2>
+          <h2>Dijkstra</h2>
           <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit, sed nihil consequuntur sequi nisi repudiandae. Blanditiis omnis ipsa perspiciatis est. Quis soluta fugit et possimus minus omnis quos, non sequi?</p>
         </div>
       </div>
