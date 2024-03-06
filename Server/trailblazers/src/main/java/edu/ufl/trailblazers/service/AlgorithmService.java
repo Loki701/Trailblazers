@@ -1,7 +1,7 @@
-package edu.ufl.trailblazers.Service;
+package edu.ufl.trailblazers.service;
 
-import edu.ufl.trailblazers.Model.Coords;
-import edu.ufl.trailblazers.Model.AlgorithmResult;
+import edu.ufl.trailblazers.model.Coords;
+import edu.ufl.trailblazers.responses.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
-import static edu.ufl.trailblazers.Model.CellType.*;
+import static edu.ufl.trailblazers.constants.CellType.*;
 
 @Service
 public class AlgorithmService {
@@ -68,12 +68,12 @@ public class AlgorithmService {
                 // If current neighbor is within bounds...
                 if (newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount) {
                     // If current neighbor is not a wall and has not been visited...
-                    if (maze[newRow][newCol] != WALL.value && !bfsVisited[newRow][newCol]) {
+                    if (maze[newRow][newCol] != WALL && !bfsVisited[newRow][newCol]) {
                         Coords unvisitedNeighbor = new Coords(newRow, newCol);
                         visitOrder.add(unvisitedNeighbor);
 
                         // If current neighbor is the finish...
-                        if (maze[newRow][newCol] == FINISH.value) { // Complete path found.
+                        if (maze[newRow][newCol] == FINISH) { // Complete path found.
                             long executionTime = System.nanoTime() - startTime;
                             return new AlgorithmResult(true, executionTime, null, visitOrder);
                         }
@@ -116,11 +116,11 @@ public class AlgorithmService {
                 int newCol = curr.col() + colDirections[i];
 
                 if (newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount) {
-                    if (maze[newRow][newCol] != WALL.value && !dfsVisited[newRow][newCol]) {
+                    if (maze[newRow][newCol] != WALL && !dfsVisited[newRow][newCol]) {
                         Coords unvisitedNeighbor = new Coords(newRow, newCol);
                         visitOrder.add(unvisitedNeighbor);
 
-                        if (maze[newRow][newCol] == FINISH.value) {
+                        if (maze[newRow][newCol] == FINISH) {
                             long executionTime = System.nanoTime() - startTime;
                             return new AlgorithmResult(true, executionTime, null, visitOrder);
                         }
@@ -135,7 +135,7 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
-    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) { // TODO:
+    public static AlgorithmResult runDijkstra(int[][] maze, Coords start) {
         int rowCount = maze.length, colCount = maze[0].length;
         int [][] distance = new int[rowCount][colCount];
 
@@ -155,7 +155,7 @@ public class AlgorithmService {
         while (!pq.isEmpty()){
             Node curr = pq.poll();
             visitedNodes.add(new Coords(curr.row, curr.col));
-            if(maze[curr.row][curr.col] == FINISH.value){
+            if(maze[curr.row][curr.col] == FINISH){
                 // for(int i = 0; i < rowCount; i++){
                 //     for(int j = 0; j < colCount; j++){
                 //         System.out.print(distance[i][j] + " ");
@@ -181,7 +181,7 @@ public class AlgorithmService {
                 int newRow = curr.row + dir[0];
                 int newCol = curr.col + dir[1];
                 if(newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount){
-                    if(maze[newRow][newCol] != WALL.value && distance[newRow][newCol] > distance[curr.row][curr.col] + 1){
+                    if(maze[newRow][newCol] != WALL && distance[newRow][newCol] > distance[curr.row][curr.col] + 1){
                         distance[newRow][newCol] = distance[curr.row][curr.col] + 1;
                         parent[newRow][newCol] = curr;
                         pq.add(new Node(newRow, newCol, distance[newRow][newCol]));

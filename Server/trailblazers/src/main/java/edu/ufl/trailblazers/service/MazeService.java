@@ -1,8 +1,10 @@
-package edu.ufl.trailblazers.Service;
+package edu.ufl.trailblazers.service;
 
-import edu.ufl.trailblazers.Model.Coords;
-import edu.ufl.trailblazers.Model.Maze;
+import edu.ufl.trailblazers.model.Coords;
+import edu.ufl.trailblazers.model.Maze;
 import org.springframework.stereotype.Service;
+
+import static edu.ufl.trailblazers.constants.CellType.*;
 
 @Service
 public class MazeService {
@@ -14,20 +16,23 @@ public class MazeService {
     }
 
     // Sets the maze to one of the same size with default configuration.
-    public void setDefault() {
+    public void setToDefault() {
         int rowCount = maze.getRowCount();
         int colCount = maze.getColCount();
         maze = new Maze(rowCount, colCount);
     }
 
     // Sets the maze to a preset configuration.
-    public void setPreset(int presetID) {
-        maze = new Maze(presetID);
+    public void setToPreset(int presetId) {
+        maze = new Maze(presetId);
     }
 
-    // Flips wall status at the passed-in location. Returns true if a wall was built or false if a wall was destroyed.
-    public boolean editWall(int row, int col) {
-        return maze.editWall(row, col);
+    public void destroyWall(int row, int col) {
+        maze.destroyWall(row, col);
+    }
+
+    public void buildWall(int row, int col) {
+        maze.buildWall(row, col);
     }
 
     public void moveStart(int row, int col) {
@@ -67,14 +72,20 @@ public class MazeService {
         return row < 0 || row >= maze.getRowCount() || col < 0 || col >= maze.getColCount();
     }
 
+    public boolean isEmptyCell(int row, int col) {
+        return maze.getBoard()[row][col] == EMPTY;
+    }
+
+    public boolean isWallCell(int row, int col) {
+        return maze.getBoard()[row][col] == WALL;
+    }
+
     public boolean isStartCell(int row, int col) {
-        Coords start = maze.getStart();
-        return start.row() == row && start.col() == col;
+        return maze.getBoard()[row][col] == START;
     }
 
     public boolean isFinishCell(int row, int col) {
-        Coords finish = maze.getFinish();
-        return finish.row() == row && finish.col() == col;
+        return maze.getBoard()[row][col] == FINISH;
     }
 
     public void deleteMaze() {
