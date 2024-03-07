@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -13,7 +14,13 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleJsonDeserializationException(HttpMessageNotReadableException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("JSON deserialization failed. " +
-                "Verify that the request body matches the expected input exactly."
-        );
+                "Verify that the request body matches the expected input exactly. " + e.getMessage() + ".");
+    }
+
+    // Return more human-readable API response when a path parameter is of an unexpected data type.
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<String> handleWrongPathParamType(MethodArgumentTypeMismatchException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Received unexpected data type for path parameter \""
+                + e.getParameter().getParameterName() + "\". " + e.getMessage() + ".");
     }
 }

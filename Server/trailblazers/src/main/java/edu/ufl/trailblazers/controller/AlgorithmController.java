@@ -1,6 +1,6 @@
 package edu.ufl.trailblazers.controller;
 
-import edu.ufl.trailblazers.responses.AlgorithmResult;
+import edu.ufl.trailblazers.model.AlgorithmResult;
 import edu.ufl.trailblazers.model.Coords;
 import edu.ufl.trailblazers.service.AlgorithmService;
 import edu.ufl.trailblazers.service.MazeService;

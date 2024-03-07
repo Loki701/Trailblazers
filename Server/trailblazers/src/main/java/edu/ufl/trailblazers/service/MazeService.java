@@ -17,8 +17,8 @@ public class MazeService {
 
     // Sets the maze to one of the same size with default configuration.
     public void setToDefault() {
-        int rowCount = maze.getRowCount();
-        int colCount = maze.getColCount();
+        int rowCount = maze.getHeight();
+        int colCount = maze.getWidth();
         maze = new Maze(rowCount, colCount);
     }
 
@@ -51,12 +51,12 @@ public class MazeService {
         return maze.getBoard();
     }
 
-    public int getRowCount() {
-        return maze.getRowCount();
+    public int getHeight() {
+        return maze.getHeight();
     }
 
-    public int getColCount() {
-        return maze.getColCount();
+    public int getWidth() {
+        return maze.getWidth();
     }
 
     public Coords getStart() {
@@ -69,7 +69,7 @@ public class MazeService {
 
     // Returns true if the passed-in location is out of bounds.
     public boolean isLocationInvalid(int row, int col) {
-        return row < 0 || row >= maze.getRowCount() || col < 0 || col >= maze.getColCount();
+        return row < 0 || row >= maze.getHeight() || col < 0 || col >= maze.getWidth();
     }
 
     public boolean isEmptyCell(int row, int col) {

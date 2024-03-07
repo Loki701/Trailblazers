@@ -1,7 +1,7 @@
 package edu.ufl.trailblazers.service;
 
 import edu.ufl.trailblazers.model.Coords;
-import edu.ufl.trailblazers.responses.AlgorithmResult;
+import edu.ufl.trailblazers.model.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -135,6 +135,7 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
+
     public static AlgorithmResult runDijkstra(int[][] maze, Coords start) {
         int rowCount = maze.length, colCount = maze[0].length;
         int [][] distance = new int[rowCount][colCount];

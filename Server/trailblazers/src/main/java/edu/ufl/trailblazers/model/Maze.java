@@ -3,6 +3,8 @@ package edu.ufl.trailblazers.model;
 import static edu.ufl.trailblazers.constants.CellType.*;
 
 public class Maze {
+    private final int height;
+    private final int width;
     private Coords start;
     private Coords finish;
     private final int[][] board;
@@ -19,6 +21,9 @@ public class Maze {
         int lastCol = colCount - 1;
         board[lastRow][lastCol] = FINISH;
         finish = new Coords(lastRow, lastCol);
+
+        height = board.length;
+        width = board[0].length;
     }
 
     // Initializes maze in a preset configuration.
@@ -28,6 +33,8 @@ public class Maze {
                 board = MazeConfiguration.getPresetBoard(presetId);
                 start = MazeConfiguration.getPresetStart(presetId);
                 finish = MazeConfiguration.getPresetFinish(presetId);
+                height = board.length;
+                width = board[0].length;
             }
             default -> throw new IllegalArgumentException("Server Bug: Parameterized Maze constructor illegal " +
                     "argument"); // MazeController ensures passed-in presetId is 1-3.
@@ -77,12 +84,12 @@ public class Maze {
         return board;
     }
 
-    public int getRowCount() {
-        return board.length;
+    public int getHeight() {
+        return height;
     }
 
-    public int getColCount() {
-        return board[0].length;
+    public int getWidth() {
+        return width;
     }
 
     public Coords getStart() {

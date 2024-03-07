@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/maze")
 public class MazeController {
@@ -56,7 +58,7 @@ public class MazeController {
     */
 
     @PostMapping() // Including a body with custom maze dimensions is for testing purposes.
-    public ResponseEntity<String> initialize(@RequestBody(required = false) PostRequestBody body) {
+    public ResponseEntity<?> initialize(@RequestBody(required = false) PostRequestBody body) {
         if (mazeService.getMaze() != null) {
             return mazeFound;
         }
@@ -89,33 +91,43 @@ public class MazeController {
                     " maze because mazes must have at least 2 cells.");
         }
         mazeService.initialize(height, width);
-        return ResponseEntity.status(HttpStatus.CREATED).body("" + height + "x" + width +
-                " maze has been initialized.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(mazeService.getMaze());
     }
 
     @PutMapping()
-    public ResponseEntity<String> configure(@RequestBody PutRequestBody body) {
+    public ResponseEntity<?> configure(@RequestBody PutRequestBody body) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
 
-        Integer configId = body.getConfigId(); // Null unless JSON deserialization is successful.
+        String configuration = body.getConfiguration(); // Null unless JSON deserialization is successful.
 
-        if (configId == null) { // Valid JSON body, but deserialization failed for configId.
-            return getFailedDeserializationResponse("configId");
+        if (configuration == null) { // Valid JSON body, but deserialization failed for configId.
+            return getFailedDeserializationResponse("configuration");
         }
-        if (configId == 0) {
+        if (configuration.equals("default")) {
             mazeService.setToDefault(); // Resets the maze to one of the same size with default configuration.
-            return ResponseEntity.status(HttpStatus.OK).body("Maze has been updated to default configuration with size "
-                    + mazeService.getRowCount() + "x" + mazeService.getColCount() + ".");
+            return ResponseEntity.status(HttpStatus.OK).body(mazeService.getMaze());
         }
-        if (configId == 1 || configId == 2 || configId == 3) {
-            mazeService.setToPreset(configId); // Sets the maze to a preset configuration with the passed-in ID.
-            return ResponseEntity.status(HttpStatus.OK).body("Maze has been updated to preset configuration " + configId
-                    + " with size " + mazeService.getRowCount() + "x" + mazeService.getColCount() + ".");
+
+        Optional<Integer> presetId = getPresetId(configuration);
+        if (presetId.isPresent()) {
+            mazeService.setToPreset(presetId.get()); // Sets the maze to a preset configuration with the passed-in ID.
+            return ResponseEntity.status(HttpStatus.OK).body(mazeService.getMaze());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Config ID " + configId +
-                " does not exist. Acceptable config IDs are 0, 1, 2, and 3.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Configuration \"" + configuration + "\" does not " +
+                "exist. Acceptable configurations are \"default\", \"preset1\", \"preset2\", and \"preset3\".");
+    }
+
+    // Given a configuration deserialized from PutRequestBody, if it maps to the ID of a preset configuration, return
+    // that ID.
+    private Optional<Integer> getPresetId(String configurationString) {
+        return switch (configurationString) {
+            case "preset1" -> Optional.of(1);
+            case "preset2" -> Optional.of(2);
+            case "preset3" -> Optional.of(3);
+            default -> Optional.empty();
+        };
     }
 
     @PatchMapping("/cells/{row}/{col}")
@@ -126,8 +138,7 @@ public class MazeController {
         }
         if (mazeService.isLocationInvalid(row, col)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Location " + stringifyCoords(row, col) +
-                    " is invalid for a maze of size " + mazeService.getRowCount() + "x" + mazeService.getColCount() +
-                    ".");
+                    " is invalid for a maze of size " + mazeService.getWidth() + "x" + mazeService.getHeight() + ".");
         }
 
         String newCellType = body.getNewCellType(); // Null unless JSON deserialization is successful.
@@ -163,7 +174,7 @@ public class MazeController {
             return getOverrideFinishResponse(row, col);
         }
         mazeService.destroyWall(row, col);
-        return ResponseEntity.status(HttpStatus.OK).body("Wall has been destroyed at location " +
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Wall has been destroyed at location " +
                 stringifyCoords(row, col) + ".");
     }
 
@@ -179,8 +190,8 @@ public class MazeController {
             return getOverrideFinishResponse(row, col);
         }
         mazeService.buildWall(row, col);
-        return ResponseEntity.status(HttpStatus.OK).body("Wall has been built at location " + stringifyCoords(row, col)
-                + ".");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Wall has been built at location " +
+                stringifyCoords(row, col) + ".");
     }
 
     private ResponseEntity<String> moveStart(int row, int col) {
@@ -196,7 +207,7 @@ public class MazeController {
         int prevCol = mazeService.getStart().col();
         mazeService.moveStart(row, col); // Moves the start cell to this location. Previous location becomes empty.
 
-        return ResponseEntity.status(HttpStatus.OK).body("Start cell has been moved to location " +
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Start cell has been moved to location " +
                 stringifyCoords(row, col) + ", and its previous location " + stringifyCoords(prevRow, prevCol) +
                 " is now empty.");
     }
@@ -214,7 +225,7 @@ public class MazeController {
         int prevCol = mazeService.getFinish().col();
         mazeService.moveFinish(row, col); // Moves the finish cell to this location. Previous location becomes empty.
 
-        return ResponseEntity.status(HttpStatus.OK).body("Finish cell has been moved to location " +
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Finish cell has been moved to location " +
                 stringifyCoords(row, col) + ", and its previous location " + stringifyCoords(prevRow, prevCol) +
                 " is now empty.");
     }
@@ -233,6 +244,6 @@ public class MazeController {
             return mazeNotFound;
         }
         mazeService.deleteMaze();
-        return ResponseEntity.status(HttpStatus.OK).body("Maze has been deleted.");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Maze has been deleted.");
     }
 }
