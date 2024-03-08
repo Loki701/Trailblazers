@@ -1,9 +1,11 @@
 package edu.ufl.trailblazers.controller;
 
 import edu.ufl.trailblazers.constants.DefaultMazeSize;
+import edu.ufl.trailblazers.model.Coords;
 import edu.ufl.trailblazers.requests.PatchRequestBody;
 import edu.ufl.trailblazers.requests.PostRequestBody;
 import edu.ufl.trailblazers.requests.PutRequestBody;
+import edu.ufl.trailblazers.responses.UpdatedCell;
 import edu.ufl.trailblazers.service.MazeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -131,7 +133,7 @@ public class MazeController {
     }
 
     @PatchMapping("/cells/{row}/{col}")
-    public ResponseEntity<String> editCell(@PathVariable int row, @PathVariable int col,
+    public ResponseEntity<?> editCell(@PathVariable int row, @PathVariable int col,
                                            @RequestBody PatchRequestBody body) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -162,7 +164,7 @@ public class MazeController {
                 "\" is not valid. Acceptable cell types are \"empty\", \"wall\", \"start\", and \"finish\".");
     }
 
-    private ResponseEntity<String> destroyWall(int row, int col) {
+    private ResponseEntity<?> destroyWall(int row, int col) {
         if (mazeService.isEmptyCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
                     " is already empty.");
@@ -173,12 +175,12 @@ public class MazeController {
         if (mazeService.isFinishCell(row, col)) {
             return getOverrideFinishResponse(row, col);
         }
+
         mazeService.destroyWall(row, col);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Wall has been destroyed at location " +
-                stringifyCoords(row, col) + ".");
+        return ResponseEntity.status(HttpStatus.OK).body(new UpdatedCell("empty", new Coords(row, col)));
     }
 
-    private ResponseEntity<String> buildWall(int row, int col) {
+    private ResponseEntity<?> buildWall(int row, int col) {
         if (mazeService.isWallCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
                     " is already a wall.");
@@ -189,45 +191,49 @@ public class MazeController {
         if (mazeService.isFinishCell(row, col)) {
             return getOverrideFinishResponse(row, col);
         }
+
         mazeService.buildWall(row, col);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Wall has been built at location " +
-                stringifyCoords(row, col) + ".");
+        return ResponseEntity.status(HttpStatus.OK).body(new UpdatedCell("wall", new Coords(row, col)));
     }
 
-    private ResponseEntity<String> moveStart(int row, int col) {
+    private ResponseEntity<?> moveStart(int row, int col) {
         if (mazeService.isStartCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
-                    " is already a start cell.");
+                    " is already the start cell.");
         }
         if (mazeService.isFinishCell(row, col)) {
             return getOverrideFinishResponse(row, col);
         }
 
-        int prevRow = mazeService.getStart().row();
-        int prevCol = mazeService.getStart().col();
+        Coords prevStart = mazeService.getStart();
         mazeService.moveStart(row, col); // Moves the start cell to this location. Previous location becomes empty.
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Start cell has been moved to location " +
-                stringifyCoords(row, col) + ", and its previous location " + stringifyCoords(prevRow, prevCol) +
-                " is now empty.");
+        UpdatedCell[] updatedCells = {
+                new UpdatedCell("empty", prevStart),
+                new UpdatedCell("start", mazeService.getStart())
+        };
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCells);
     }
 
-    private ResponseEntity<String> moveFinish(int row, int col) {
+    private ResponseEntity<?> moveFinish(int row, int col) {
         if (mazeService.isFinishCell(row, col)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Location " + stringifyCoords(row, col) +
-                    " is already a finish cell.");
+                    " is already the finish cell.");
         }
         if (mazeService.isStartCell(row, col)) {
             return getOverrideStartResponse(row, col);
         }
 
-        int prevRow = mazeService.getFinish().row();
-        int prevCol = mazeService.getFinish().col();
+        Coords prevFinish = mazeService.getFinish();
         mazeService.moveFinish(row, col); // Moves the finish cell to this location. Previous location becomes empty.
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Finish cell has been moved to location " +
-                stringifyCoords(row, col) + ", and its previous location " + stringifyCoords(prevRow, prevCol) +
-                " is now empty.");
+        UpdatedCell[] updatedCells = {
+                new UpdatedCell("empty", prevFinish),
+                new UpdatedCell("finish", mazeService.getFinish())
+        };
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCells);
     }
 
     @GetMapping() // For testing purposes.
@@ -239,11 +245,11 @@ public class MazeController {
     }
 
     @DeleteMapping() // For testing purposes.
-    public ResponseEntity<String> deleteMaze() {
+    public ResponseEntity<?> deleteMaze() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
         mazeService.deleteMaze();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Maze has been deleted.");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

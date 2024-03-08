@@ -1,7 +1,7 @@
 package edu.ufl.trailblazers.service;
 
 import edu.ufl.trailblazers.model.Coords;
-import edu.ufl.trailblazers.model.AlgorithmResult;
+import edu.ufl.trailblazers.responses.AlgorithmResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,4 +1,6 @@
-package edu.ufl.trailblazers.model;
+package edu.ufl.trailblazers.responses;
+
+import edu.ufl.trailblazers.model.Coords;
 
 import java.util.Queue;
 
