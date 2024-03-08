@@ -54,7 +54,7 @@ public class MazeController {
     /* NOTES:
     * - Only one maze can be initialized at a time. Repeated POST requests will fail unless a DELETE request is made.
     * - A maze must be currently initialized with a POST request for any PUT, PATCH, GET, or DELETE request to work.
-    * - The only way to configure maze size is via POST /maze/size/default or POST /maze/size/custom.
+    * - The only way to configure maze size is via POST /maze with a request body included.
     * - Once a maze is initialized, there is no way to change its size unless DELETE /maze is called and a new maze is
     *   initialized.
     */
@@ -245,7 +245,7 @@ public class MazeController {
     }
 
     @DeleteMapping() // For testing purposes.
-    public ResponseEntity<?> deleteMaze() {
+    public ResponseEntity<String> deleteMaze() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
