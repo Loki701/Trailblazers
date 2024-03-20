@@ -27,12 +27,11 @@ const createGrid = () => {
 };
 
 const LandingPage = () => {
+  const [startNodeCoords, setStartNodeCoords] = useState([Math.floor(ROWS / 2), Math.floor(COLS / 4)]);
+  const [endNodeCoords, setEndNodeCoords] = useState([Math.floor(ROWS / 2), Math.floor((3 * COLS) / 4)]);
   const [grid, setGrid] = useState(createGrid());
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [currentNodeState, setCurrentNodeState] = useState(null);
-  // const [algorithm, setAlgorithm] = useState("Algorithm");
-  // const [pace, setPace] = useState("Normal");
-  // const [maze, setMaze] = useState("None");
   const [algorithmSelector, setAlgorithmSelector] = useState("Algorithm");
   const [paceSelector, setPaceSelector] = useState("Pace");
   const [mazeSelector, setMazeSelector] = useState("Maze Type");
@@ -52,7 +51,7 @@ const LandingPage = () => {
     }
   };
 
-  const handleMouseDown = (row, col) => {
+  const handleMouseDown = async (row, col) => {
     setIsMouseDown(true);
     const newGrid = grid.map((row) =>
       row.map((node) => {
@@ -64,17 +63,29 @@ const LandingPage = () => {
 
     if (grid[row][col].isStart) {
       setCurrentNodeState("start");
+      // setStartNodeCoords({row,col});
     } else if (grid[row][col].isEnd) {
       setCurrentNodeState("end");
+      // setEndNodeCoords({row,col});
     } else {
       const updatedNode = { ...grid[row][col], isWall: !grid[row][col].isWall };
       newGrid[row][col] = updatedNode;
+      let newCellT = updatedNode.isWall ? "wall" : "empty";
       setGrid(newGrid);
       setCurrentNodeState("wall");
+      try {
+        await axios.patch(
+          `http://localhost:8080/maze/cells/${row}/${col}`,
+          { newCellType: newCellT }
+        );
+      }
+      catch (err) {
+        console.log("error patching cell", err);
+      }
     }
   };
 
-  const handleMouseEnter = (row, col) => {
+  const handleMouseEnter = async (row, col) => {
     if (!isMouseDown) return;
 
     const newGrid = grid.map((row) =>
@@ -90,14 +101,45 @@ const LandingPage = () => {
     if (currentNodeState === "start") {
       const updatedNode = { ...grid[row][col], isStart: true };
       newGrid[row][col] = updatedNode;
+      // setStartNodeCoords([row, col]);
+      try {
+        await axios.patch(
+          `http://localhost:8080/maze/cells/${row}/${col}`,
+          { newCellType: "start" }
+        );
+      } catch (err) {
+        console.log("error patching cell", err);
+      }
       setGrid(newGrid);
     } else if (currentNodeState === "end") {
       const updatedNode = { ...grid[row][col], isEnd: true };
       newGrid[row][col] = updatedNode;
+      // setEndNodeCoords([row, col]);
+      try {
+        await axios.patch(
+          `http://localhost:8080/maze/cells/${row}/${col}`,
+          { newCellType: "finish" }
+        );
+      } catch (err) {
+        console.log("error patching cell", err);
+      }
       setGrid(newGrid);
     } else if (currentNodeState === "wall") {
       const updatedNode = { ...grid[row][col], isWall: !grid[row][col].isWall };
       newGrid[row][col] = updatedNode;
+      let newCellT = updatedNode.isWall ? "wall" : "empty";
+      const patchRequestBody = {
+        newCellType: newCellT
+      };
+      try {
+        await axios.patch(
+          `http://localhost:8080/maze/cells/${row}/${col}`,
+          patchRequestBody
+        );
+      } catch (err) {
+        console.log("error patching cell", err)
+      }
+      console.log("updated node")
       setGrid(newGrid);
     }
   };
@@ -107,20 +149,63 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
+    const initMaze = async () => {
+
+      try {
+
+        const mazeStatusResponse = await axios.get("http://localhost:8080/maze/status");
+
+        console.log(mazeStatusResponse)
+        if (mazeStatusResponse.data) {
+          await axios.delete("http://localhost:8080/maze");
+        }
+        await axios.post(
+          "http://localhost:8080/maze"
+        );
+        console.log("maze initialized");
+
+        await axios.patch(
+          `http://localhost:8080/maze/cells/${startNodeCoords[0]}/${startNodeCoords[1]}`,
+          { newCellType: "start" }
+        );
+        await axios.patch(
+          `http://localhost:8080/maze/cells/${endNodeCoords[0]}/${endNodeCoords[1]}`,
+          { newCellType: "finish" }
+        );
+
+        console.log("start and end cells modified");
+
+      } catch (err) {
+        console.log("maze error: ", err);
+      }
+    }
+
+    initMaze();
     document.addEventListener("mouseup", handleMouseUp);
     return () => {
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, []);
 
-  const displayVisitedNodes = (visitedNodes) => {
-    const animationSpeed = 100; // Adjust the speed of the animation
+  const displayVisitedNodes = async (visitedNodes, isShortestPath) => {
+    const animationSpeed = 100 * paceSelector; // Adjust the speed of the animation
     console.log("displayVisitedNodes started");
+    if (visitedNodes === null) {
+      alert("Issue with our Server try again later!")
+      return;
+    }
+    const l = visitedNodes.length;
+    console.log(l);
 
-    visitedNodes.forEach((node, index) => {
-      setTimeout(() => {
+    // Loop through each visited node
+    for (let index = 0; index < l; index++) {
+      const node = visitedNodes[index];
+      if (!(index === 0 || index === l - 1)) {
+        // Introduce a delay between animation steps according to the pace selector
+        await new Promise((resolve) => setTimeout(resolve, animationSpeed));
+
+        // Update the grid to mark the node as visited
         const { row, col } = node;
-        console.log(row, col);
         setGrid((prevGrid) => {
           const updatedGrid = prevGrid.map((gridRow) =>
             gridRow.map((gridNode) => {
@@ -128,6 +213,7 @@ const LandingPage = () => {
                 return {
                   ...gridNode,
                   isVisited: true,
+                  isShortestPath: isShortestPath
                 };
               }
               return gridNode;
@@ -135,56 +221,61 @@ const LandingPage = () => {
           );
           return updatedGrid;
         });
-      }, index * animationSpeed);
+      }
+    }
+  };
+
+  const clearVisitedBlocks = () => {
+    return new Promise((resolve) => {
+      const updatedGrid = grid.map(row =>
+        row.map(node => ({
+          ...node,
+          isVisited: false, // Reset isVisited flag
+        }))
+      );
+      setGrid(updatedGrid);
+      resolve(); // Resolve the promise after updating the grid
     });
   };
-  // const handleDropDownSelection = (name, value) => {
-  //   if(name === "algorithm") setAlgorithm(value);
-  //   else if(name === "pace") setPace(value);
-  //   else if(name === "maze") setMaze(value);
-  // }
+
+
+
   const handleRun = async () => {
-    //contact server to get visited nodes
-    // const coordinatesArray = [
-    //   { row: 0, col: 1 },
-    //   { row: 0, col: 2 },
-    //   { row: 0, col: 3 },
-    //   { row: 0, col: 4 },
-    //   { row: 0, col: 5 },
-    //   { row: 0, col: 6 },
-    //   { row: 0, col: 7 },
-    //   { row: 1, col: 7 },
-    //   // Add more coordinates as needed
-    // ];
-    // if maze has ran before remove all visited nodes
     if (
       algorithmSelector === "Algorithm" ||
-      paceSelector === "Pace" ||
-      mazeSelector === "Maze Type"
-    ) {
-      alert("Please select valid values for all selectors before running.");
-      return;
-    }
-
-    const dimensions = { rows: ROWS, cols: COLS };
-    const sendData = {
-      dimensions: dimensions,
-      algorithmName: algorithmSelector,
-      grid: grid,
-    };
-    // console.log(JSON.stringify(sendData));
-    try {
-      //post maze
-      const response = await axios.post(
-        " http://localhost:8080/run",
-        JSON.stringify(sendData)
+      paceSelector === "Pace" 
+      // mazeSelector === "Maze Type"
+  ) {
+      alert(
+          "Please select valid values for all selectors before running."
       );
-      const visitedNodesFromServer = response.data.visitedNodes;
-      displayVisitedNodes(visitedNodesFromServer);
-    } catch (e) {
-      console.error("Error fetching data from the server:", e);
+      return;
+  }
+
+    try {
+      await clearVisitedBlocks();
+
+      // Get shortest path
+      const shortestPathResponse = await axios.get(
+        `http://localhost:8080/maze/shortest-path?algorithm=${algorithmSelector.toLowerCase()}`
+      );
+      if (shortestPathResponse.data.isCompletable === false) {
+        alert("No path found!");
+        return;
+      }
+      const visitedPath = shortestPathResponse.data.visitOrder;
+
+      const shortestPath = shortestPathResponse.data.shortestPath;
+
+      console.log(shortestPathResponse);
+      await displayVisitedNodes(visitedPath, false);
+      await displayVisitedNodes(shortestPath, true);
+
+    } catch (error) {
+      console.error("Error fetching data from the server:", error);
     }
   };
+
 
   return (
     <div className="landingPage">
@@ -199,7 +290,7 @@ const LandingPage = () => {
           <option value="Algorithm">Algorithm</option>
           <option value="Dijkstra">Dijkstra</option>
           <option value="BFS">BFS</option>
-          {/* Add more options as needed */}
+          <option value="DFS">DFS</option>
         </select>
 
         <select
@@ -209,10 +300,10 @@ const LandingPage = () => {
           onChange={handleChange}
           required
         >
-          <option value="Slow">Pace</option>
-          <option value="Slow">Slow</option>
-          <option value="Normal">Normal</option>
-          <option value="Fast">Fast</option>
+          <option value="Pace">Pace</option>
+          <option value={2}>Slow</option>
+          <option value={1}>Normal</option>
+          <option value={.5} >Fast</option>
         </select>
 
         <select
@@ -222,12 +313,16 @@ const LandingPage = () => {
           onChange={handleChange}
           required
         >
-          <option value="None">Maze Type</option>
+          <option value="Maze Type">Maze Type</option>
           <option value="None">None</option>
-          <option value="Recursive">Recursive</option>
-          <option value="Simplex">Simplex</option>
+          {/* <option value="Recursive">Recursive</option>
+          <option value="Simplex">Simplex</option> */}
         </select>
       </div>
+      {/* <div style={{ color: "white" }}>
+        {startNodeCoords[0]}, {startNodeCoords[1]} |
+        {endNodeCoords[0]}, {endNodeCoords[1]}
+      </div> */}
       <div className="main-container">
         <div className="grid">
           {grid.map((row, rowIndex) => (
@@ -235,11 +330,12 @@ const LandingPage = () => {
               {row.map((node, colIndex) => (
                 <div
                   key={colIndex}
-                  className={`node ${node.isStart ? "start" : ""} ${
-                    node.isEnd ? "end" : ""
-                  } ${node.isWall ? "wall" : ""} ${
-                    node.isVisited ? "visited" : ""
-                  }`}
+                  className={`node 
+                  ${node.isWall ? "wall" : ""} 
+                  ${node.isVisited ? (node.isShortestPath ? "shortest-path" : "visited") : ""}
+                  ${node.isEnd ? "end" : ""} 
+                  ${node.isStart ? "start" : ""} 
+                  `}
                   onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
                   onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
                 ></div>

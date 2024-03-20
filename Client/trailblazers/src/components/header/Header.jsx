@@ -33,7 +33,7 @@ const Header  = () => {
                     close
                     </span>
                 ):(    
-                <span class="material-symbols-outlined" onClick={handleMobileMenuClick}>
+                <span className="material-symbols-outlined" onClick={handleMobileMenuClick}>
                 menu
                 </span>
                 )}

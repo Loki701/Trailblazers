@@ -12,7 +12,8 @@
     --card-box-shadow-2-blur: 15px;
     --card-border-color: rgba(255, 255, 255, 0.1);
 }
-
+*{
+}
 body {
     margin: 0;
     display: flex;
@@ -21,6 +22,7 @@ body {
     height: 100vh;
     /* background-color: #282c34; */
     background-color: black;
+    overflow-x: hidden;
 }
 
 *,
@@ -130,27 +132,112 @@ select option:checked {
     width: 20px;
     height: 20px;
     border: 1px solid #495057;
-    transition: background-color 0.1s;
+    position: relative; /* Add position relative for animation */
+    
 }
-
-.node.start {
-    background-color: #28a745;
-}
-
-.node.end {
-    background-color: #dc3545;
-}
-
 .node.wall {
     background-color: #343a40;
 }
 
-.node.visited {
-    background-color: #007bff;
+.node.visited,
+.node.shortest-path {
+    position: relative;
+    overflow: hidden; /* Ensure overflow is hidden for pseudo-element */
 }
 
-.node.shortest-path {
-    background-color: #ffc107;
+.node.visited::before{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    background-color: #007bff; /* Initial color */
+    animation: fillNode .5s forwards; /* Use animation to change color */
+    
+}
+
+.node.shortest-path::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0; /* Initial color */
+    animation: fillSNode .5s forwards; 
+    background-color: #ffc107; /* Initial color for shortest path nodes */
+    
+}
+
+
+@keyframes fillNode {
+    0% {
+        width: 0; /* Initial width */
+        height: 0; /* Initial height */
+        border-radius: 100%; /* Initial border radius */
+    }
+    25% {
+        width: 20%; /* 25% width */
+        height: 20%; /* 25% height */
+        border-radius: 60%; /* 25% border radius */
+    }
+    50%{
+        width: 50%; 
+        height: 50%; 
+        border-radius: 60%;
+    }
+    75%{
+        width: 75%; 
+        height: 75%; 
+        border-radius: 30%;
+    }
+    100% {
+        width: 100%; 
+        height: 100%; 
+        border-radius: 0%; 
+    }
+}
+
+@keyframes fillSNode {
+    0% {
+        width: 0; /* Initial width */
+        height: 0; /* Initial height */
+        border-radius: 100%; /* Initial border radius */
+        background-color: #007bff;
+    }
+    25% {
+        width: 20%; /* 25% width */
+        height: 20%; /* 25% height */
+        border-radius: 60%; /* 25% border radius */
+    }
+    50%{
+        width: 50%; 
+        height: 50%; 
+        border-radius: 60%;
+    }
+    75%{
+        width: 75%; 
+        height: 75%; 
+        border-radius: 30%;
+    }
+    100% {
+        width: 100%; 
+        height: 100%; 
+        border-radius: 0%; 
+        background-color: #ffc107; 
+    }
+}
+
+.node.start {
+    background-color: #28a745;
+    z-index: 1;
+}
+
+.node.end {
+    background-color: #dc3545;
+    z-index: 1;
 }
 
 @media screen and (max-width: 768px) {
@@ -158,6 +245,12 @@ select option:checked {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+    }
+    .main-container{
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        
     }
 
 }
@@ -181,6 +274,7 @@ select option:checked {
     font-weight: 900;
     letter-spacing: 1em;
     margin-top: 2rem;
+    margin-bottom: 10rem;
 
     -webkit-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
         0px 0px 0.5em 0px var(--glow-color);

@@ -235,7 +235,13 @@ public class MazeController {
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedCells);
     }
-
+    @GetMapping("/status") 
+    public Boolean getMazeStatus(){
+        if(mazeService.getMaze() == null){
+            return false;
+        }
+        return true;
+    }
     @GetMapping() // For testing purposes.
     public ResponseEntity<?> getMaze() {
         if (mazeService.getMaze() == null) {
