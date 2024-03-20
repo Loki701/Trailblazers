@@ -1,0 +1,192 @@
+.header{
+    width: 100%;
+    height: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--glow-color);
+    color: white;
+    
+    /* background-color: red; */
+  }
+  
+  .header-container{
+    width: 100%;
+    height: 40px;
+   /* background-color: red; */
+   margin: 10px 40px;
+   display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: violet; */
+  }
+  .header-container .content img{
+    height: 120px;
+  }
+  .header-container .content img:hover{
+    cursor: pointer;
+  }
+  .header-container .navbar{
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 42px;
+    /* background-color: green; */
+  }
+  .header-container .navbar .column{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+  .header-container .navbar .column .link{
+    text-decoration: none;
+    font-size: large;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .5s;
+  }
+  .header-container .navbar .column .link:hover{
+    color: var(--glow-color);
+  }
+  .header-container .navbar .actions{
+    display: flex;
+    /* background-color: yellow; */
+
+    gap: 16px;
+  }
+  .header-container .navbar .actions .button{
+    height: 40px;
+    width: 100px;
+    padding: 8px 20px;
+    font-size: 16px;
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+  .header-container .navbar .actions .button:first-child{
+    background-color: white;
+    color: var(--text-color);
+  }
+  .header-container .material-symbols-outlined {
+  display: none;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+@media(max-width: 890px){
+  .header-container{
+    width: 100%;
+    height: 40px;
+   /* background-color: red; */
+   margin: 10px 30px;
+   display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-container .navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-container .navbar .column{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-container .navbar .column .link{
+    font-size: medium;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .header-container .navbar .actions{
+    display: flex;
+    gap: 10px;
+  }
+  .header-container .navbar .actions .button{
+    height: 40px;
+    width: 72px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+}
+@media(max-width: 750px){
+  .header-container .material-symbols-outlined {
+    display: block;
+    cursor: pointer;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+  }
+      .header-container .navbar{
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        top: 72px;
+        left: -100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 2.5rem 4%;
+        background-color: black;
+        color: white;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.2);
+        z-index: 100;
+        transition: .25s ease;
+        transition-delay: .25s;
+      }
+      .header-container .navbar.active{
+        left: 0;
+        transition-delay: 0s;
+      }
+      .header-container .navbar .column{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+      }
+      .header-container .navbar .column .link{
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .header-container .navbar .actions{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .header-container .navbar .actions .button{
+        height: 45px;
+        width: 100%;
+        padding: 8px 20px;
+        font-size: 16px;
+        border: 1px solid var(--text-color);
+        background-color: black;
+        color: white;
+        cursor: pointer;
+      }
+      .header-container .navbar .actions .button:first-child{
+        background-color: white;
+        color: var(--text-color);
+      }
+}
+  
+ 
+  
