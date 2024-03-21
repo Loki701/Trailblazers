@@ -34,8 +34,8 @@ public class MazeController {
     }
 
     // Returns a response for when the request body is valid JSON, but deserialization failed for expected properties.
-    private ResponseEntity<String> getFailedDeserializationResponse(String missingProperties) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Did not receive " + missingProperties +
+    private ResponseEntity<String> getFailedDeserializationResponse(String didntReceive) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Did not receive " + didntReceive +
                 " in request body. Verify that the request body matches the expected input exactly.");
     }
 
@@ -65,25 +65,39 @@ public class MazeController {
             return mazeFound;
         }
 
-        Integer height, width; // Null unless JSON deserialization is successful.
+        // Null unless JSON deserialization is successful.
+        int[][] board;
+        Integer height, width;
+
         if (body == null) {
             height = DefaultMazeSize.HEIGHT;
             width = DefaultMazeSize.WIDTH;
-        }
-        else {
-            height = body.getHeight();
-            width = body.getWidth();
+            return initializeDefaultConfig(height, width);
         }
 
-        if (height == null || width == null) { // Valid JSON body, but deserialization failed for height and/or width.
-            if (width != null) {
+        board = body.getBoard();
+        height = body.getHeight();
+        width = body.getWidth();
+
+        if (board != null) { // Client wants to initialize a maze with custom configuration.
+            return initializeCustomConfig(board);
+        }
+        if (height != null || width != null) { // Client wants to initialize a maze with default configuration.
+            if (height == null) {
                 return getFailedDeserializationResponse("height");
             }
-            if (height != null) {
+            if (width == null) {
                 return getFailedDeserializationResponse("width");
             }
-            return getFailedDeserializationResponse("height and width");
+            return initializeDefaultConfig(height, width);
         }
+
+        // All are null. It's unknown if client wants to initialize a maze with custom or default configuration.
+        return getFailedDeserializationResponse("board in request body, or did not receive height and width");
+    }
+
+    // Initialize a maze in the default configuration with the passed-in dimensions.
+    private ResponseEntity<?> initializeDefaultConfig(int height, int width) {
         if (height < 0 || width < 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot initialize " + height + "x" + width +
                     " maze because negative dimensions are not allowed.");
@@ -93,6 +107,18 @@ public class MazeController {
                     " maze because mazes must have at least 2 cells.");
         }
         mazeService.initialize(height, width);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mazeService.getMaze());
+    }
+
+    // Initialize a maze in a custom configuration with the passed-in board (if the board is legal).
+    private ResponseEntity<?> initializeCustomConfig(int[][] board) {
+        boolean mazeWasInitialized = mazeService.initializeIfLegal(board);
+
+        if (!mazeWasInitialized) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Illegal maze configuration. Mazes must have " +
+                    "exactly one 2 and exactly one 3, all remaining cells must be either 0 or 1, and all rows must " +
+                    "have the same length.");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(mazeService.getMaze());
     }
 
@@ -235,6 +261,7 @@ public class MazeController {
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedCells);
     }
+
     @GetMapping("/status") 
     public Boolean getMazeStatus(){
         if(mazeService.getMaze() == null){
@@ -242,7 +269,8 @@ public class MazeController {
         }
         return true;
     }
-    @GetMapping() // For testing purposes.
+
+    @GetMapping()
     public ResponseEntity<?> getMaze() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
@@ -250,7 +278,7 @@ public class MazeController {
         return ResponseEntity.status(HttpStatus.OK).body(mazeService.getMaze());
     }
 
-    @DeleteMapping() // For testing purposes.
+    @DeleteMapping()
     public ResponseEntity<String> deleteMaze() {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;

@@ -1,5 +1,6 @@
 package edu.ufl.trailblazers.controller;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,6 +14,13 @@ public class ControllerExceptionHandler {
     // Called when request body has invalid JSON or the expected properties have unexpected value types.
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleJsonDeserializationException(HttpMessageNotReadableException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("JSON deserialization failed. " +
+                "Verify that the request body matches the expected input exactly. " + e.getMessage() + ".");
+    }
+
+    // Called when a JSON property expecting a 2D array receives a string that contains non-whitespace characters.
+    @ExceptionHandler(InvalidDefinitionException.class)
+    public ResponseEntity<String> handleJsonDeserializationException(InvalidDefinitionException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("JSON deserialization failed. " +
                 "Verify that the request body matches the expected input exactly. " + e.getMessage() + ".");
     }

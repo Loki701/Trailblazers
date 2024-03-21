@@ -9,6 +9,15 @@ public class Maze {
     private Coords finish;
     private final int[][] board;
 
+    // Initializes a maze in a custom configuration. Assumes the passed-in board is legal.
+    public Maze(int[][] board, Coords start, Coords finish) {
+        this.board = board;
+        this.start = start;
+        this.finish = finish;
+        height = board.length;
+        width = board[0].length;
+    }
+
     // Initializes maze in the default configuration with the passed-in dimensions. All cells are empty except top left
     // (start) and bottom right (finish).
     public Maze(int rowCount, int colCount) {

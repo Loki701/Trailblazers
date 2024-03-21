@@ -4,6 +4,7 @@ package edu.ufl.trailblazers.requests;
 public class PostRequestBody { // Setters aren't needed because Spring Boot uses Jackson to set fields via reflection.
     private Integer height;
     private Integer width;
+    private int[][] board; // When included, initialize with a custom configuration.
 
     public PostRequestBody() {}
 
@@ -13,5 +14,8 @@ public class PostRequestBody { // Setters aren't needed because Spring Boot uses
     }
     public Integer getWidth() {
         return width;
+    }
+    public int[][] getBoard() {
+        return board;
     }
 }
