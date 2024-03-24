@@ -4,6 +4,7 @@ import {
    Routes, BrowserRouter
 } from "react-router-dom";
 import Community from './components/header/Community';
+import Algorithm from './components/header/Algorithm';
 // import { Algorithm, Community, MiniGames, Resources, Navbar, AboutUs, Home } from './components';
 
 import LandingPage from './components/header/landingPage/LandingPage';
@@ -18,7 +19,7 @@ function App() {
     
       <Routes>
         <Route path="/" element={<LandingPage/>}/>
-        {/* <Route path="/algorithms" element={<Algorithm/>}/> */}
+        <Route path="/algorithms" element={<Algorithm/>}/>
         {/* <Route path="/mini-games" element={<MiniGames/>}/> */}
         <Route path="/community" element={<Community/>}/>
         {/* <Route path="/resources" element={<Resources/>}/> */}

@@ -1,32 +1,34 @@
 import React from 'react';
 
 const Community = () => {
-  const styles = {
-    communityPage: {
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px',
-      backgroundColor: '#f9f9f9',
-    },
-    title: {
-      color: '#333',
-      textAlign: 'center',
-    },
-    intro: {
-      marginBottom: '20px',
-    },
-    section: {
-      backgroundColor: '#fff',
-      borderRadius: '5px',
-      padding: '20px',
-      marginBottom: '20px',
-    },
-    sectionTitle: {
-      color: '#444',
-    },
-    sectionContent: {
-      color: '#666',
-    },
-  };
+    const styles = {
+        communityPage: {
+          fontFamily: 'Arial, sans-serif',
+          padding: '20px',
+          backgroundColor: '#000', // Changed to black
+          color: '#fff', // Changed to white
+        },
+        title: {
+          color: '#fff', // Changed to white
+          textAlign: 'center',
+        },
+        intro: {
+          marginBottom: '20px',
+        },
+        section: {
+          backgroundColor: '#000', // Changed to black
+          borderRadius: '5px',
+          padding: '20px',
+          marginBottom: '20px',
+        },
+        sectionTitle: {
+          color: '#fff', // Changed to white
+        },
+        sectionContent: {
+          color: '#fff', // Changed to white
+        },
+      };
+    
 
   return (
     <div style={styles.communityPage}>
