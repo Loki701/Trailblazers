@@ -74,10 +74,10 @@ const LandingPage = () => {
       setGrid(newGrid);
       setCurrentNodeState("wall");
       try {
-        await axios.patch(
-          `http://localhost:8080/maze/cells/${row}/${col}`,
-          { newCellType: newCellT }
-        );
+        // await axios.patch(
+        //   `http://localhost:8080/maze/cells/${row}/${col}`,
+        //   { newCellType: newCellT }
+        // );
       }
       catch (err) {
         console.log("error patching cell", err);
@@ -103,10 +103,10 @@ const LandingPage = () => {
       newGrid[row][col] = updatedNode;
       // setStartNodeCoords([row, col]);
       try {
-        await axios.patch(
-          `http://localhost:8080/maze/cells/${row}/${col}`,
-          { newCellType: "start" }
-        );
+        // await axios.patch(
+        //   `http://localhost:8080/maze/cells/${row}/${col}`,
+        //   { newCellType: "start" }
+        // );
       } catch (err) {
         console.log("error patching cell", err);
       }
@@ -116,10 +116,10 @@ const LandingPage = () => {
       newGrid[row][col] = updatedNode;
       // setEndNodeCoords([row, col]);
       try {
-        await axios.patch(
-          `http://localhost:8080/maze/cells/${row}/${col}`,
-          { newCellType: "finish" }
-        );
+        // await axios.patch(
+        //   `http://localhost:8080/maze/cells/${row}/${col}`,
+        //   { newCellType: "finish" }
+        // );
       } catch (err) {
         console.log("error patching cell", err);
       }
@@ -132,10 +132,10 @@ const LandingPage = () => {
         newCellType: newCellT
       };
       try {
-        await axios.patch(
-          `http://localhost:8080/maze/cells/${row}/${col}`,
-          patchRequestBody
-        );
+        // await axios.patch(
+        //   `http://localhost:8080/maze/cells/${row}/${col}`,
+        //   patchRequestBody
+        // );
       } catch (err) {
         console.log("error patching cell", err)
       }
@@ -153,25 +153,25 @@ const LandingPage = () => {
 
       try {
 
-        const mazeStatusResponse = await axios.get("http://localhost:8080/maze/status");
-
-        console.log(mazeStatusResponse)
-        if (mazeStatusResponse.data) {
-          await axios.delete("http://localhost:8080/maze");
-        }
-        await axios.post(
-          "http://localhost:8080/maze"
-        );
-        console.log("maze initialized");
-
-        await axios.patch(
-          `http://localhost:8080/maze/cells/${startNodeCoords[0]}/${startNodeCoords[1]}`,
-          { newCellType: "start" }
-        );
-        await axios.patch(
-          `http://localhost:8080/maze/cells/${endNodeCoords[0]}/${endNodeCoords[1]}`,
-          { newCellType: "finish" }
-        );
+        // const mazeStatusResponse = await axios.get("http://localhost:8080/maze/status");
+        //
+        // console.log(mazeStatusResponse)
+        // if (mazeStatusResponse.data) {
+        //   await axios.delete("http://localhost:8080/maze");
+        // }
+        // await axios.post(
+        //   "http://localhost:8080/maze"
+        // );
+        // console.log("maze initialized");
+        //
+        // await axios.patch(
+        //   `http://localhost:8080/maze/cells/${startNodeCoords[0]}/${startNodeCoords[1]}`,
+        //   { newCellType: "start" }
+        // );
+        // await axios.patch(
+        //   `http://localhost:8080/maze/cells/${endNodeCoords[0]}/${endNodeCoords[1]}`,
+        //   { newCellType: "finish" }
+        // );
 
         console.log("start and end cells modified");
 
@@ -242,23 +242,52 @@ const LandingPage = () => {
 
   const handleRun = async () => {
     if (
-      algorithmSelector === "Algorithm" ||
-      paceSelector === "Pace" 
-      // mazeSelector === "Maze Type"
-  ) {
+        algorithmSelector === "Algorithm" ||
+        paceSelector === "Pace"
+        // mazeSelector === "Maze Type"
+    ) {
       alert(
           "Please select valid values for all selectors before running."
       );
       return;
-  }
+    }
 
     try {
       await clearVisitedBlocks();
 
+      const mazeStatusResponse = await axios.get("http://localhost:8080/maze/status");
+
+      if (mazeStatusResponse.data) {
+        await axios.delete("http://localhost:8080/maze");
+      }
+      const newGrid = [];
+      for (let row = 0; row < ROWS; row++) {
+        const currentRow = [];
+        for (let col = 0; col < COLS; col++) {
+          if (grid[row][col].isStart) {
+            currentRow.push(2);
+          } else if (grid[row][col].isEnd) {
+            currentRow.push(3);
+          }
+          else if (grid[row][col].isWall) {
+            currentRow.push(1);
+          }
+          else {
+            currentRow.push(0);
+          }
+        }
+        newGrid.push(currentRow);
+      }
+
+      await axios.post(
+          "http://localhost:8080/maze",
+          {board: newGrid}
+      );
+
       // Get shortest path
       const shortestPathResponse = await axios.get(
-        `http://localhost:8080/maze/shortest-path?algorithm=${algorithmSelector.toLowerCase()}`
-      );
+          `http://localhost:8080/maze/shortest-path?algorithm=${algorithmSelector.toLowerCase()}`
+    );
       if (shortestPathResponse.data.isCompletable === false) {
         alert("No path found!");
         return;
