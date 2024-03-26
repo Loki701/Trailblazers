@@ -1,34 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Community = () => {
-    const styles = {
-        communityPage: {
-          fontFamily: 'Arial, sans-serif',
-          padding: '20px',
-          backgroundColor: '#000', // Changed to black
-          color: '#fff', // Changed to white
-        },
-        title: {
-          color: '#fff', // Changed to white
-          textAlign: 'center',
-        },
-        intro: {
-          marginBottom: '20px',
-        },
-        section: {
-          backgroundColor: '#000', // Changed to black
-          borderRadius: '5px',
-          padding: '20px',
-          marginBottom: '20px',
-        },
-        sectionTitle: {
-          color: '#fff', // Changed to white
-        },
-        sectionContent: {
-          color: '#fff', // Changed to white
-        },
-      };
-    
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
+  const styles = {
+    communityPage: {
+      fontFamily: 'Arial, sans-serif',
+      padding: '20px',
+      backgroundColor: '#000', // Changed to black
+      color: '#fff', // Changed to white
+      opacity: loaded ? 1 : 0,
+            transition: 'opacity 1s ease-in-out',
+            animationName: 'fadeIn',
+            animationDuration: '2s'
+    },
+    title: {
+      color: '#fff', // Changed to white
+      textAlign: 'center',
+    },
+    intro: {
+      marginBottom: '20px',
+    },
+    section: {
+      backgroundColor: '#000', // Changed to black
+      borderRadius: '5px',
+      padding: '20px',
+      marginBottom: '20px',
+    },
+    sectionTitle: {
+      color: '#fff', // Changed to white
+    },
+    sectionContent: {
+      color: '#fff', // Changed to white
+    },
+  };
+
 
   return (
     <div style={styles.communityPage}>

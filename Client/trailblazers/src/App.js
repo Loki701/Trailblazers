@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import Community from './components/header/Community';
 import Algorithm from './components/header/Algorithm';
+import Resources from './components/header/Resources';
+
 // import { Algorithm, Community, MiniGames, Resources, Navbar, AboutUs, Home } from './components';
 
 import LandingPage from './components/header/landingPage/LandingPage';
@@ -22,7 +24,7 @@ function App() {
         <Route path="/algorithms" element={<Algorithm/>}/>
         {/* <Route path="/mini-games" element={<MiniGames/>}/> */}
         <Route path="/community" element={<Community/>}/>
-        {/* <Route path="/resources" element={<Resources/>}/> */}
+        <Route path="/resources" element={<Resources/>}/>
         {/* <Route path="/about-us" element={<AboutUs/>}/> */}
       </Routes>
     </div>
