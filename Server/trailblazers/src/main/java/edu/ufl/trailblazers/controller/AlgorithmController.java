@@ -30,13 +30,14 @@ public class AlgorithmController {
 
         int[][] board = mazeService.getBoard();
         Coords start = mazeService.getStart();
+        Coords finish = mazeService.getFinish();
 
         AlgorithmResult result = switch (algorithm) {
             case "bfs" -> AlgorithmService.runBFS(board, start);
             case "dfs" -> AlgorithmService.runDFS(board, start);
             case "dijkstra" -> AlgorithmService.runDijkstra(board, start);
-            case "bellman-ford" -> AlgorithmService.runBellmanFord(board, start);
-            case "a-star" -> AlgorithmService.runAStar(board, start);
+            case "bellman-ford" -> AlgorithmService.runBellmanFord(board, start, finish);
+            case "a-star" -> AlgorithmService.runAStar(board, start, finish);
             default -> null;
         };
 

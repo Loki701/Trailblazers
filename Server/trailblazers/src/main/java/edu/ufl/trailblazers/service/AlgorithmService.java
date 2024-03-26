@@ -195,11 +195,11 @@ public class AlgorithmService {
         return new AlgorithmResult(false, executionTime, null, visitedNodes);
     }
 
-    public static AlgorithmResult runBellmanFord(int[][] maze, Coords start) {
+    public static AlgorithmResult runBellmanFord(int[][] maze, Coords start, Coords finish) {
         throw new UnsupportedOperationException(); // TODO: Code Bellman-Ford algorithm.
     }
 
-    public static AlgorithmResult runAStar(int[][] maze, Coords start) {
+    public static AlgorithmResult runAStar(int[][] maze, Coords start, Coords finish) {
         throw new UnsupportedOperationException(); // TODO: Code A* algorithm.
     }
 }
