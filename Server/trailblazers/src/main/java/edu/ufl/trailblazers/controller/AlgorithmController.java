@@ -23,7 +23,7 @@ public class AlgorithmController {
     }
 
     @GetMapping("/shortest-path")
-    public ResponseEntity<?> runAlgorithm(@RequestParam String algorithm) {
+    public ResponseEntity<?> runAlgorithm(@RequestParam(name="algorithm") String algorithm) {
         if (mazeService.getMaze() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No maze has been initialized.");
         }

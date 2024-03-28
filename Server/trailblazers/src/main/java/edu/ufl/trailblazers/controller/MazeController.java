@@ -159,8 +159,8 @@ public class MazeController {
     }
 
     @PatchMapping("/cells/{row}/{col}")
-    public ResponseEntity<?> editCell(@PathVariable int row, @PathVariable int col,
-                                           @RequestBody PatchRequestBody body) {
+    public ResponseEntity<?> editCell(@PathVariable(name="row") int row, @PathVariable(name="col") int col,
+                                      @RequestBody PatchRequestBody body) {
         if (mazeService.getMaze() == null) {
             return mazeNotFound;
         }
@@ -264,7 +264,7 @@ public class MazeController {
 
     @GetMapping("/status") 
     public Boolean getMazeStatus(){
-        if(mazeService.getMaze() == null){
+        if (mazeService.getMaze() == null){
             return false;
         }
         return true;
