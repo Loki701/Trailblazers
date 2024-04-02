@@ -473,3 +473,111 @@ select option:checked {
         font-size: 1em;
     }
 }
+
+/* AboutUs */
+
+.text-center {
+    padding-top: 60px;
+    text-align: center;
+    color: wheat;
+    font-size: 30px;
+    
+}
+.message{
+    margin: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+    color: white;
+    text-align: center;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.developers{
+    color: wheat;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+.team-row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    margin: 20px;
+    margin-top: 0px;
+    align-items: center;
+
+}
+
+.team-item{
+    background-color: darkgrey;
+    text-align: center;
+    margin: 10px;
+    padding: 30px;
+    border-radius: 50px 8px;
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+
+.team-img{
+    height: 170px;
+    width: 150px;
+    border-radius: 30%;
+}
+
+.team-item:hover{
+    background: darkslategray;
+    color: white;
+}
+
+.team-item h3{
+    margin: 20px 0 1px 0 !important;
+    font-size: 20px;
+    font-family:sans-serif;
+    font-weight: 700;
+}
+
+ul.icons {
+    display: flex;
+    justify-content: center;
+    margin-right: 40px;
+    
+}
+
+.team-infor p{
+    font-size: 12px;
+    font-weight:normal;
+    font-style:italic;
+}
+
+
+ul.icons li{
+    display: inline-block;
+    margin:0 6px;
+    transition: all 0.25s ease-in-out;
+}
+
+ul.icons li a{
+    display: inline-block;
+    margin: 0;
+    padding: 8px 8px;
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
+    line-height: 18px;
+    border-radius: 50%;
+    color: blue;
+    
+}
+
+ul.icons li a.github{
+    background-color: lightsteelblue ;
+}
+
+ul.icons li a.linkedin{
+    background-color: khaki;
+}
+
+ul.icons li a.facebook{
+    background-color: lightpink;
+}
