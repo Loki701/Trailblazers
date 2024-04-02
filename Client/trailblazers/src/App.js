@@ -3,6 +3,7 @@ import {
   Route,
    Routes, BrowserRouter
 } from "react-router-dom";
+import AboutUs from './components/AboutUs';
 
 // import { Algorithm, Community, MiniGames, Resources, Navbar, AboutUs, Home } from './components';
 
@@ -22,7 +23,7 @@ function App() {
         {/* <Route path="/mini-games" element={<MiniGames/>}/> */}
         {/* <Route path="/community" element={<Community/>}/> */}
         {/* <Route path="/resources" element={<Resources/>}/> */}
-        {/* <Route path="/about-us" element={<AboutUs/>}/> */}
+        <Route path="/about-us" element={<AboutUs/>}/>
       </Routes>
     </div>
     </BrowserRouter>
