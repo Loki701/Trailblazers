@@ -29,12 +29,24 @@ public class AlgorithmService {
             return Integer.compare(this.distance, other.distance);
         }
     }
+
     private static Queue<Coords> NodeListToCoordsQueue(List<Node> nodeList){
         Queue<Coords> coordsQueue = new LinkedList<>();
         for(Node node : nodeList){
             coordsQueue.add(new Coords(node.row, node.col));
         }
         return coordsQueue;
+    }
+
+    // Reverses a queue in place.
+    private static void reverseQueue(Queue<Coords> q) {
+        Stack<Coords> stk = new Stack<>();
+        while (!q.isEmpty()) {
+            stk.push(q.poll());
+        }
+        while (!stk.isEmpty()) {
+            q.add(stk.pop());
+        }
     }
 
     // Given a valid maze, find a path from start to finish using Breadth First Search.
@@ -50,6 +62,7 @@ public class AlgorithmService {
         boolean[][] bfsVisited = new boolean[rowCount][colCount]; // Completely false by default.
         Queue<Coords> bfsQ = new LinkedList<>();
         Queue<Coords> visitOrder = new LinkedList<>(); // Returned in TraversalResult.
+        Coords[][] parents = new Coords[rowCount][colCount]; // Parents (preceding cell in traversal) of each maze cell.
 
         // Begin BFS.
         long startTime = System.nanoTime();
@@ -71,11 +84,14 @@ public class AlgorithmService {
                     if (maze[newRow][newCol] != WALL && !bfsVisited[newRow][newCol]) {
                         Coords unvisitedNeighbor = new Coords(newRow, newCol);
                         visitOrder.add(unvisitedNeighbor);
+                        parents[newRow][newCol] = curr;
 
                         // If current neighbor is the finish...
                         if (maze[newRow][newCol] == FINISH) { // Complete path found.
+                            Queue<Coords> shortestPath = constructPath(parents, start, unvisitedNeighbor);
                             long executionTime = System.nanoTime() - startTime;
-                            return new AlgorithmResult(true, executionTime, null, visitOrder);
+
+                            return new AlgorithmResult(true, executionTime, shortestPath, visitOrder);
                         }
 
                         bfsVisited[newRow][newCol] = true;
@@ -88,6 +104,21 @@ public class AlgorithmService {
         // If bfsQ is empty and end isn't reached, maze can't be finished.
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, visitOrder);
+    }
+
+    // Constructs path from start cell to finish cell using 2D array of cell parents.
+    private static Queue<Coords> constructPath(Coords[][] parents, Coords start, Coords finish) {
+        Queue<Coords> path = new LinkedList<>();
+        Coords curr = finish;
+
+        while (!curr.equals(start)) {
+            path.add(curr);
+            curr = parents[curr.row()][curr.col()];
+        }
+        path.add(start);
+
+        reverseQueue(path); // Reverse order of path in place so that it goes from start to finish.
+        return path;
     }
 
     // Given a valid maze, find a path from start to finish using Depth First Search. Same logic as BFS, but with a

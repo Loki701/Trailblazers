@@ -264,10 +264,7 @@ public class MazeController {
 
     @GetMapping("/status") 
     public Boolean getMazeStatus(){
-        if (mazeService.getMaze() == null){
-            return false;
-        }
-        return true;
+        return mazeService.getMaze() != null;
     }
 
     @GetMapping()
