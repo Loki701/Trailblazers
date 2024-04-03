@@ -320,6 +320,8 @@ const LandingPage = () => {
           <option value="Dijkstra">Dijkstra</option>
           <option value="BFS">BFS</option>
           <option value="DFS">DFS</option>
+          <option value="Bellman-Ford">Bellman-Ford</option>
+          <option value="A-Star">A-Star</option>
         </select>
 
         <select
