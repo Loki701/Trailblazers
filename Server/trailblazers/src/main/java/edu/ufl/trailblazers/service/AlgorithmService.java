@@ -49,8 +49,23 @@ public class AlgorithmService {
         }
     }
 
+    // Constructs path from start cell to finish cell using 2D array of cell parents.
+    private static Queue<Coords> constructPath(Coords[][] parents, Coords start, Coords finish) {
+        Queue<Coords> path = new LinkedList<>();
+        Coords curr = finish;
+
+        while (!curr.equals(start)) {
+            path.add(curr);
+            curr = parents[curr.row()][curr.col()];
+        }
+        path.add(start);
+
+        reverseQueue(path); // Reverse order of path in place so that it goes from start to finish.
+        return path;
+    }
+
     // Given a valid maze, find a path from start to finish using Breadth First Search.
-    public static AlgorithmResult runBFS(int[][] maze, Coords start) { // TODO: Find shortest path with BFS.
+    public static AlgorithmResult runBFS(int[][] maze, Coords start) {
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -106,24 +121,9 @@ public class AlgorithmService {
         return new AlgorithmResult(false, executionTime, null, visitOrder);
     }
 
-    // Constructs path from start cell to finish cell using 2D array of cell parents.
-    private static Queue<Coords> constructPath(Coords[][] parents, Coords start, Coords finish) {
-        Queue<Coords> path = new LinkedList<>();
-        Coords curr = finish;
-
-        while (!curr.equals(start)) {
-            path.add(curr);
-            curr = parents[curr.row()][curr.col()];
-        }
-        path.add(start);
-
-        reverseQueue(path); // Reverse order of path in place so that it goes from start to finish.
-        return path;
-    }
-
     // Given a valid maze, find a path from start to finish using Depth First Search. Same logic as BFS, but with a
     // stack instead of a queue.
-    public static AlgorithmResult runDFS(int[][] maze, Coords start) { // TODO: Find shortest path with DFS.
+    public static AlgorithmResult runDFS(int[][] maze, Coords start) {
         int rowCount = maze.length;
         int colCount = maze[0].length;
 
@@ -133,6 +133,7 @@ public class AlgorithmService {
         boolean[][] dfsVisited = new boolean[rowCount][colCount];
         Stack<Coords> dfsStk = new Stack<>();
         Queue<Coords> visitOrder = new LinkedList<>();
+        Coords[][] parents = new Coords[rowCount][colCount];
 
         long startTime = System.nanoTime();
         dfsVisited[start.row()][start.col()] = true;
@@ -150,10 +151,13 @@ public class AlgorithmService {
                     if (maze[newRow][newCol] != WALL && !dfsVisited[newRow][newCol]) {
                         Coords unvisitedNeighbor = new Coords(newRow, newCol);
                         visitOrder.add(unvisitedNeighbor);
+                        parents[newRow][newCol] = curr;
 
                         if (maze[newRow][newCol] == FINISH) {
+                            Queue<Coords> path = constructPath(parents, start, unvisitedNeighbor);
                             long executionTime = System.nanoTime() - startTime;
-                            return new AlgorithmResult(true, executionTime, null, visitOrder);
+
+                            return new AlgorithmResult(true, executionTime, path, visitOrder);
                         }
 
                         dfsVisited[newRow][newCol] = true;
