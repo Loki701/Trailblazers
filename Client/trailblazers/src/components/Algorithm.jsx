@@ -85,6 +85,12 @@ const Algorithm = () => {
                     Breadth-First Search (BFS) is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root (or some arbitrary node of a graph, sometimes referred to as a 'search key') and explores the neighbor nodes at the present depth prior to moving on to nodes at the next depth level.
                 </p>
             </div>
+            <div style={styles.algorithm}>
+                <h2 style={styles.algorithmTitle}>A Star</h2>
+                <p style={styles.algorithmContent}>
+                A* (A Star) is a computer algorithm that is widely used in pathfinding and graph traversal, the process of plotting an efficiently directed path between multiple points, called nodes. It enjoys widespread use due to its performance and accuracy. The algorithm efficiently plots a walkable path between multiple nodes, or points, on the graph. At each step it picks the node according to a value-'f' which is a parameter equal to the sum of two other parameters – 'g' (the cost of the path from the start node) and 'h' (the heuristic estimate of the cost of the path to the goal).
+                </p>
+            </div>
         </div>
     );
 };

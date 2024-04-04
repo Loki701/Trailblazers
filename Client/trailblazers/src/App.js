@@ -7,7 +7,7 @@ import AboutUs from './components/AboutUs';
 import Community from './components/Community';
 import Algorithm from './components/Algorithm';
 // import { Algorithm, Community, MiniGames, Resources, Navbar, AboutUs, Home } from './components';
-
+import Resources from './components/Resources';
 import LandingPage from './components/header/landingPage/LandingPage';
 import Header from './components/header/Header';
 
@@ -23,7 +23,7 @@ function App() {
         <Route path="/algorithms" element={<Algorithm/>}/>
         {/* <Route path="/mini-games" element={<MiniGames/>}/> */}
         <Route path="/community" element={<Community/>}/>
-        {/* <Route path="/resources" element={<Resources/>}/> */}
+        <Route path="/resources" element={<Resources/>}/>
         <Route path="/about-us" element={<AboutUs/>}/>
       </Routes>
     </div>

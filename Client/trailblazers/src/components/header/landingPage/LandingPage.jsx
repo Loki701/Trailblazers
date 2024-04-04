@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { set } from "lodash";
+import { useNavigate } from 'react-router-dom';
 
 const ROWS = 20;
 const COLS = 30;
@@ -35,12 +37,23 @@ const LandingPage = () => {
   const [algorithmSelector, setAlgorithmSelector] = useState("Algorithm");
   const [paceSelector, setPaceSelector] = useState("Pace");
   const [mazeSelector, setMazeSelector] = useState("Maze Type");
+  const [text, setText] = useState("");
+  const [info, setInfo] = useState("Welcome to the algorithm visualizer! This tool allows you to visualize the pathfinding and maze generation algorithms in action. To get started, select an algorithm, pace, and maze type from the dropdown menu and click the run button. You can also create walls by clicking and dragging on the grid. Enjoy!");
+
+  const navigate = useNavigate();
+
+  const handleLearnMoreClick = () => {
+    navigate('/algorithms');
+  };
+
+
 
   const handleChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
     if (name === "algo") {
       setAlgorithmSelector(value);
+      setText(value);
       // handleDropdownSelection( 'algorithm', value);
     } else if (name === "pace") {
       setPaceSelector(value);
@@ -242,12 +255,12 @@ const LandingPage = () => {
 
   const handleRun = async () => {
     if (
-        algorithmSelector === "Algorithm" ||
-        paceSelector === "Pace"
-        // mazeSelector === "Maze Type"
+      algorithmSelector === "Algorithm" ||
+      paceSelector === "Pace"
+      // mazeSelector === "Maze Type"
     ) {
       alert(
-          "Please select valid values for all selectors before running."
+        "Please select valid values for all selectors before running."
       );
       return;
     }
@@ -280,14 +293,14 @@ const LandingPage = () => {
       }
 
       await axios.post(
-          "http://localhost:8080/maze",
-          {board: newGrid}
+        "http://localhost:8080/maze",
+        { board: newGrid }
       );
 
       // Get shortest path
       const shortestPathResponse = await axios.get(
-          `http://localhost:8080/maze/shortest-path?algorithm=${algorithmSelector.toLowerCase()}`
-    );
+        `http://localhost:8080/maze/shortest-path?algorithm=${algorithmSelector.toLowerCase()}`
+      );
       if (shortestPathResponse.data.isCompletable === false) {
         alert("No path found!");
         return;
@@ -316,7 +329,7 @@ const LandingPage = () => {
           onChange={handleChange}
           required
         >
-          <option value="Algorithm">Algorithm</option>
+          <option value="Algorithm" >Algorithm</option>
           <option value="Dijkstra">Dijkstra</option>
           <option value="BFS">BFS</option>
           <option value="DFS">DFS</option>
@@ -376,13 +389,27 @@ const LandingPage = () => {
         </div>
         <div className="card">
           <h1>Algorithm Visualizer</h1>
+          <h2>{text}</h2>
           <p>
-            Welcome to the algorithm visualizer! This tool allows you to
-            visualize the pathfinding and maze generation algorithms in action.
-            To get started, select an algorithm, pace, and maze type from the
-            dropdown menu and click the run button. You can also create walls by
-            clicking and dragging on the grid. Enjoy!
+            {info}
           </p>
+          <button  className="learn-more-btn" onClick={handleLearnMoreClick}
+  style={{
+    backgroundColor: '#007BFF', // Change the background color
+    color: 'white', // Change the text color
+    border: 'none', // Remove the border
+    padding: '10px 20px', // Add some padding
+    borderRadius: '5px', // Round the corners
+    fontSize: '16px', // Increase the font size
+    cursor: 'pointer', // Change the cursor on hover
+    transition: 'background-color 0.3s ease', // Smoothly transition the background color
+  }}
+  onMouseOver={(e) => {
+    e.target.style.backgroundColor = '#0056b3'; // Darken the background color on hover
+  }}
+  onMouseOut={(e) => {
+    e.target.style.backgroundColor = '#007BFF'; // Reset the background color on mouse out
+  }} >Learn More</button>
         </div>
       </div>
       <button className="glowing-btn" onClick={handleRun}>
