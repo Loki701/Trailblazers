@@ -1,5 +1,5 @@
 import React from "react";
-import '@fortawesome/fontawesome-free/css/all.css';
+// import '@fortawesome/fontawesome-free/css/all.css';
 
 
 const AboutUs = () => {
@@ -38,7 +38,9 @@ const AboutUs = () => {
                         </div>
                     
                         <div className="team-item">
-                            <img src="jose.jpg" className="team-img" alt="josePic"/>
+                            <img src="josef.jpg" className="team-img" alt="josePic"
+                                
+                            />
                             <h3>JOSE FIGUEREDO</h3>
                             <div className="team-infor">
                                 <p>Front-End/Back-End Developer</p>

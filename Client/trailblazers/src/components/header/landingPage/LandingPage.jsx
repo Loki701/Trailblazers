@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { set } from "lodash";
 import { useNavigate } from 'react-router-dom';
 
 const ROWS = 20;
@@ -29,24 +28,28 @@ const createGrid = () => {
 };
 
 const LandingPage = () => {
-  const [startNodeCoords, setStartNodeCoords] = useState([Math.floor(ROWS / 2), Math.floor(COLS / 4)]);
-  const [endNodeCoords, setEndNodeCoords] = useState([Math.floor(ROWS / 2), Math.floor((3 * COLS) / 4)]);
   const [grid, setGrid] = useState(createGrid());
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [currentNodeState, setCurrentNodeState] = useState(null);
   const [algorithmSelector, setAlgorithmSelector] = useState("Algorithm");
   const [paceSelector, setPaceSelector] = useState("Pace");
   const [mazeSelector, setMazeSelector] = useState("Maze Type");
-  const [text, setText] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
+  const [text, setText] = useState("Algorithm Visualizer");
   const [info, setInfo] = useState("Welcome to the algorithm visualizer! This tool allows you to visualize the pathfinding and maze generation algorithms in action. To get started, select an algorithm, pace, and maze type from the dropdown menu and click the run button. You can also create walls by clicking and dragging on the grid. Enjoy!");
 
+  const algoInfo = [
+    {name: "Dijkstra", info: "Dijkstra's algorithm is a pathfinding algorithm that finds the shortest path between two nodes in a graph. It works by iteratively selecting the node with the smallest distance from the start node and updating the distances of its neighbors. The algorithm continues until the end node is reached, at which point the shortest path is reconstructed by backtracking through the nodes."},
+    {name: "BFS", info: "Breadth-first search (BFS) is a graph traversal algorithm that explores all the neighboring nodes at the present depth before moving on to the nodes at the next depth. It is often used to find the shortest path between two nodes in an unweighted graph."},
+    {name: "DFS", info: "Depth-first search (DFS) is a graph traversal algorithm that explores as far as possible along each branch before backtracking. It is often used to explore all the nodes in a graph and can be modified to find the shortest path between two nodes."},
+    {name: "Bellman-Ford", info: "Bellman-Ford is a single-source shortest path algorithm that can handle negative edge weights. It works by iteratively relaxing the edges of the graph until the shortest paths are found. The algorithm detects negative cycles and returns an error if one is found."},
+    {name: "A-Star", info: "A* (pronounced 'A-star') is a pathfinding algorithm that uses a heuristic to guide its search. It is often used to find the shortest path between two nodes in a graph and is more efficient than Dijkstra's algorithm for this purpose. A* uses a priority queue to select the next node to explore based on the sum of the cost to reach the node and the heuristic estimate of the cost to reach the goal."},
+  ]
   const navigate = useNavigate();
 
   const handleLearnMoreClick = () => {
     navigate('/algorithms');
   };
-
-
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -54,6 +57,7 @@ const LandingPage = () => {
     if (name === "algo") {
       setAlgorithmSelector(value);
       setText(value);
+      setInfo(algoInfo.find(algo => algo.name === value).info);
       // handleDropdownSelection( 'algorithm', value);
     } else if (name === "pace") {
       setPaceSelector(value);
@@ -65,6 +69,7 @@ const LandingPage = () => {
   };
 
   const handleMouseDown = async (row, col) => {
+    if (isRunning) return;
     setIsMouseDown(true);
     const newGrid = grid.map((row) =>
       row.map((node) => {
@@ -99,6 +104,7 @@ const LandingPage = () => {
   };
 
   const handleMouseEnter = async (row, col) => {
+    if (isRunning) return;
     if (!isMouseDown) return;
 
     const newGrid = grid.map((row) =>
@@ -158,42 +164,11 @@ const LandingPage = () => {
   };
 
   const handleMouseUp = () => {
+    if (isRunning) return;
     setIsMouseDown(false);
   };
 
   useEffect(() => {
-    const initMaze = async () => {
-
-      try {
-
-        // const mazeStatusResponse = await axios.get("http://localhost:8080/maze/status");
-        //
-        // console.log(mazeStatusResponse)
-        // if (mazeStatusResponse.data) {
-        //   await axios.delete("http://localhost:8080/maze");
-        // }
-        // await axios.post(
-        //   "http://localhost:8080/maze"
-        // );
-        // console.log("maze initialized");
-        //
-        // await axios.patch(
-        //   `http://localhost:8080/maze/cells/${startNodeCoords[0]}/${startNodeCoords[1]}`,
-        //   { newCellType: "start" }
-        // );
-        // await axios.patch(
-        //   `http://localhost:8080/maze/cells/${endNodeCoords[0]}/${endNodeCoords[1]}`,
-        //   { newCellType: "finish" }
-        // );
-
-        console.log("start and end cells modified");
-
-      } catch (err) {
-        console.log("maze error: ", err);
-      }
-    }
-
-    initMaze();
     document.addEventListener("mouseup", handleMouseUp);
     return () => {
       document.removeEventListener("mouseup", handleMouseUp);
@@ -208,7 +183,6 @@ const LandingPage = () => {
       return;
     }
     const l = visitedNodes.length;
-    console.log(l);
 
     // Loop through each visited node
     for (let index = 0; index < l; index++) {
@@ -254,6 +228,11 @@ const LandingPage = () => {
 
 
   const handleRun = async () => {
+    setIsRunning(!isRunning);
+    if (isRunning) {
+      await clearVisitedBlocks();
+      return;
+    }
     if (
       algorithmSelector === "Algorithm" ||
       paceSelector === "Pace"
@@ -266,7 +245,6 @@ const LandingPage = () => {
     }
 
     try {
-      await clearVisitedBlocks();
 
       const mazeStatusResponse = await axios.get("http://localhost:8080/maze/status");
 
@@ -363,10 +341,6 @@ const LandingPage = () => {
           <option value="Simplex">Simplex</option> */}
         </select>
       </div>
-      {/* <div style={{ color: "white" }}>
-        {startNodeCoords[0]}, {startNodeCoords[1]} |
-        {endNodeCoords[0]}, {endNodeCoords[1]}
-      </div> */}
       <div className="main-container">
         <div className="grid">
           {grid.map((row, rowIndex) => (
@@ -388,34 +362,30 @@ const LandingPage = () => {
           ))}
         </div>
         <div className="card">
-          <h1>Algorithm Visualizer</h1>
-          <h2>{text}</h2>
+          <h1>{text}</h1>
           <p>
             {info}
           </p>
-          <button  className="learn-more-btn" onClick={handleLearnMoreClick}
-  style={{
-    backgroundColor: '#007BFF', // Change the background color
-    color: 'white', // Change the text color
-    border: 'none', // Remove the border
-    padding: '10px 20px', // Add some padding
-    borderRadius: '5px', // Round the corners
-    fontSize: '16px', // Increase the font size
-    cursor: 'pointer', // Change the cursor on hover
-    transition: 'background-color 0.3s ease', // Smoothly transition the background color
-  }}
-  onMouseOver={(e) => {
-    e.target.style.backgroundColor = '#0056b3'; // Darken the background color on hover
-  }}
-  onMouseOut={(e) => {
-    e.target.style.backgroundColor = '#007BFF'; // Reset the background color on mouse out
-  }} >Learn More</button>
+          {text !=  "Algorithm Visualizer"?
+          (
+            <button  
+            className="learn-more-btn" 
+            onClick={handleLearnMoreClick}
+           >Learn More</button>
+          ):(
+            <></>
+          )
+        }
         </div>
       </div>
       <button className="glowing-btn" onClick={handleRun}>
+        {isRunning ? (
+        <span className="glowing-txt ">
+          CL<span className="faulty-letter">E</span>A<span className="faulty-letter">R</span>{" "}
+        </span>) : (
         <span className="glowing-txt">
           R<span className="faulty-letter">U</span>N{" "}
-        </span>
+        </span>)}
       </button>
     </div>
   );

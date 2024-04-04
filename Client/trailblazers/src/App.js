@@ -10,6 +10,7 @@ import Algorithm from './components/Algorithm';
 import Resources from './components/Resources';
 import LandingPage from './components/header/landingPage/LandingPage';
 import Header from './components/header/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
         <Route path="/resources" element={<Resources/>}/>
         <Route path="/about-us" element={<AboutUs/>}/>
       </Routes>
+
+      <Footer />
     </div>
     </BrowserRouter>
   );
