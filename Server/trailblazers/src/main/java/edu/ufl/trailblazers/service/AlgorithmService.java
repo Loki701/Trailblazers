@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+
 
 import static edu.ufl.trailblazers.constants.CellType.*;
 
@@ -229,12 +234,168 @@ public class AlgorithmService {
 
         return new AlgorithmResult(false, executionTime, null, visitedNodes);
     }
+    //Infinity value for Bellmanford Algorithm
+    private static final int INF = Integer.MAX_VALUE;
+    //helper classes for points in bellmandford implementation
+    static class Edge {
+        Coords src, dest;
+        int weight;
 
-    public static AlgorithmResult runBellmanFord(int[][] maze, Coords start, Coords finish) {
-        throw new UnsupportedOperationException(); // TODO: Code Bellman-Ford algorithm.
+        Edge(Coords src, Coords dest, int weight) {
+            this.src = src;
+            this.dest = dest;
+            this.weight = weight;
+        }
     }
 
+    public static AlgorithmResult runBellmanFord(int[][] maze, Coords start, Coords finish) {
+        int n = maze.length;
+        int m = maze[0].length;
+        long startTime = System.nanoTime();
+        PriorityQueue<Coords> visited = new PriorityQueue<>(Comparator.comparingInt(c -> Math.abs(c.row() - start.row()) + Math.abs(c.col() - start.col())));
+        List<Edge> edges = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (maze[i][j] == 1)
+                    continue;
+                Coords src = new Coords(i, j);
+                visited.add(src); // Add all nodes to visited set
+                if (i - 1 >= 0 && maze[i - 1][j] != 1)
+                    edges.add(new Edge(src, new Coords(i - 1, j), 1));
+                if (i + 1 < n && maze[i + 1][j] != 1)
+                    edges.add(new Edge(src, new Coords(i + 1, j), 1));
+                if (j - 1 >= 0 && maze[i][j - 1] != 1)
+                    edges.add(new Edge(src, new Coords(i, j - 1), 1));
+                if (j + 1 < m && maze[i][j + 1] != 1)
+                    edges.add(new Edge(src, new Coords(i, j + 1), 1));
+            }
+        }
+
+        Map<Coords, Integer> dist = new HashMap<>();
+        Map<Coords, Coords> parent = new HashMap<>();
+        PriorityQueue<Coords> pq = new PriorityQueue<>(Comparator.comparingInt(dist::get));
+
+        for (Edge edge : edges) {
+            dist.put(edge.src, INF);
+            dist.put(edge.dest, INF);
+        }
+
+        dist.put(start, 0);
+        pq.offer(start);
+
+        while (!pq.isEmpty()) {
+            Coords current = pq.poll();
+            if (current.equals(finish))
+                break;
+
+            for (Edge edge : edges) {
+                if (edge.src.equals(current)) {
+                    int newDist = dist.get(current) + edge.weight;
+                    if (newDist < dist.get(edge.dest)) {
+                        dist.put(edge.dest, newDist);
+                        parent.put(edge.dest, current);
+                        pq.offer(edge.dest);
+                        visited.add(edge.dest); // Add the visited node
+                    }
+                }
+            }
+        }
+        if (!parent.containsKey(finish)) {
+            long executionTime = System.nanoTime() - startTime;
+            return new AlgorithmResult(false, executionTime, null, visited);
+        }
+
+        PriorityQueue<Coords> shortestPath = new PriorityQueue<>(Comparator.comparingInt(dist::get));
+        Coords curr = finish;
+        while (curr != null) {
+            shortestPath.offer(curr);
+            curr = parent.get(curr);
+        }
+
+        long executionTime = System.nanoTime() - startTime;
+        return new AlgorithmResult(true, executionTime, shortestPath, visited);
+    }
+
+
+    //helper class of nodes with weight and hueristic values saved
+    private static class AStarNode {
+        int[] position;
+        AStarNode parent;
+        int g; // Cost from start node to current node
+        int h; // Heuristic (estimated cost from current node to end node)
+        int f; // Total cost
+        public AStarNode(int[] position, AStarNode parent) {
+            this.position = position;
+            this.parent = parent;
+            this.g = 0;
+            this.h = 0;
+            this.f = 0;
+        }
+    }
+    //overide of comparator to find difference in total cost between A* nodes
+    static Comparator<AStarNode> comparator = new Comparator<AStarNode>() {
+            @Override
+            public int compare(AStarNode n1, AStarNode n2) {
+                return n1.f - n2.f;
+            }
+        };
     public static AlgorithmResult runAStar(int[][] maze, Coords start, Coords finish) {
-        throw new UnsupportedOperationException(); // TODO: Code A* algorithm.
+        //throw new UnsupportedOperationException(); // TODO: Code A* algorithm.
+        AStarNode startNode = new AStarNode(new int[]{start.row(), start.col()}, null);
+        AStarNode endNode = new AStarNode(new int[]{finish.row(), finish.col()}, null);
+        long startTime = System.nanoTime();
+
+        PriorityQueue<AStarNode> openList = new PriorityQueue<>(comparator);
+        HashSet<String> closedSet = new HashSet<>();
+        HashSet<String> visitedSet = new HashSet<>(); // Keep track of visited coordinates
+        openList.add(startNode);
+
+        //queues for ALgorithmResults
+        Queue<Coords> shortestPath = new LinkedList<>();
+        Queue<Coords> Visited = new LinkedList<>();
+
+        while (!openList.isEmpty()) {
+            AStarNode current = openList.poll();
+
+            if (current.position[0] == endNode.position[0] && current.position[1] == endNode.position[1]) {
+                ArrayList<int[]> path = new ArrayList<>();
+                while (current != null) {
+                    path.add(0, current.position);
+                    shortestPath.add(new Coords(current.position[0], current.position[1]));
+                    current = current.parent;
+                }
+                long executionTime = System.nanoTime() - startTime;
+                return new AlgorithmResult(true, executionTime, shortestPath, Visited);
+            }
+
+            visitedSet.add(current.position[0] + "," + current.position[1]); // Add current position to visited set
+            Visited.add(new Coords(current.position[0], current.position[1]));//add to the visited queue
+
+            int[][] neighbors = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; // 4-connected grid
+            for (int[] neighbor : neighbors) {
+                int[] newPosition = { current.position[0] + neighbor[0], current.position[1] + neighbor[1] };
+
+                if (newPosition[0] < 0 || newPosition[0] >= maze.length || newPosition[1] < 0 || newPosition[1] >= maze[0].length)
+                    continue;
+
+                if (maze[newPosition[0]][newPosition[1]] == 1)
+                    continue;
+
+                if (closedSet.contains(newPosition[0] + "," + newPosition[1]) || visitedSet.contains(newPosition[0] + "," + newPosition[1]))
+                    continue;
+
+                AStarNode neighborNode = new AStarNode(newPosition, current);
+
+                neighborNode.g = current.g + 1;
+                neighborNode.h = Math.abs(newPosition[0] - endNode.position[0]) + Math.abs(newPosition[1] - endNode.position[1]);
+                neighborNode.f = neighborNode.g + neighborNode.h;
+
+                openList.add(neighborNode);
+            }
+            closedSet.add(current.position[0] + "," + current.position[1]);
+        }
+        long executionTime = System.nanoTime() - startTime;
+        return new AlgorithmResult(false, executionTime, null, Visited);
     }
 }
