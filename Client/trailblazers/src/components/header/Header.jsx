@@ -44,13 +44,10 @@ const Header  = () => {
                             <a onClick={() => handleExploreClick("/algorithms")}>Explore Algorithms</a>
                         </li>
                         <li className="link">
-                            <a onClick={() => handleExploreClick("/mini-games")}>MiniGames</a>
-                        </li>
-                        <li className="link">
                             <a onClick={() => handleExploreClick("/about-us")}>About Us</a>
                         </li>
                         <li className="link">
-                            <a onClick={()=> handleExploreClick("/community")}>Community</a>
+                            <a onClick={()=> handleExploreClick("/community")}>FAQ</a>
                         </li>
                         <li className="link">
                             <a onClick={()=> handleExploreClick("/resources")}>Resources</a>

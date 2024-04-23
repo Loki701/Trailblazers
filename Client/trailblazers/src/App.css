@@ -12,7 +12,135 @@
     --card-box-shadow-2-blur: 15px;
     --card-border-color: rgba(255, 255, 255, 0.1);
 }
-*{
+
+
+.faq-container{
+    /* background-color: red; */
+    color: white;
+}
+.faq-heading{
+    margin-top: 3rem;
+    text-align: center;
+}
+.faq-content{
+    line-height: 1.5;
+    min-height: 90vh;
+    font-size: 1.25rem;
+}
+details div {
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    padding: 1.5em;
+}
+
+.faq-content details div > * + * {
+    margin-top: 1.5em;
+}
+
+.faq-content details + details {
+    margin-top: .5rem;
+}
+
+.faq-content summary {
+    list-style: none;
+}
+
+.faq-content summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-content summary {
+    border: 2px solid white;
+    padding: .75em 1em;
+    cursor: pointer;
+    position: relative;
+    padding-left: calc(1.75rem + .75rem + .75rem);
+}
+
+.faq-content summary:before {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: .75rem;
+    content: "↓";
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: var(--glow-color);
+    border-radius: 50%;
+    color: black;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.faq-content details[open] summary {
+    background-color: var(--glow-color);
+    color: black;
+}
+
+.faq-content details[open] summary:before {
+    content: "↑";
+}
+
+.faq-content summary:hover {
+    background-color: var(--glow-color);
+    color: black;
+}
+
+.faq-content a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 1px 0 0;
+}
+
+.faq-content a:hover {
+    box-shadow: 0 3px 0 0;
+}
+
+.faq-content code {
+    font-family: monospace;
+    font-weight: 600;
+}
+
+.faq-content > div {
+    width: 90%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+
+.resources{
+    min-height: 100vh;
+    width: 100%;
+    margin: 5rem 20%;
+    color: white;
+    font-size: 25px;
+}
+.resources-description{
+    width: 30rem;
+}
+.resources-content {
+    list-style:square;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.resources-content a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    transition: .5s;
+}
+.resources-content a:hover {
+    color: var(--glow-color);
 }
 body {
     margin: 0;
@@ -481,10 +609,10 @@ select option:checked {
 
 /* AboutUs */
 
-.text-center {
-    padding-top: 60px;
+.aboutus-title {
+    padding: 2rem 0;
     text-align: center;
-    color: wheat;
+    color: white;
     font-size: 30px;
     
 }
@@ -498,10 +626,10 @@ select option:checked {
 }
 
 .developers{
-    color: wheat;
+    color: White;
     text-align: center;
     font-size: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 3rem;
 }
 .team-row{
     display: flex;
@@ -515,12 +643,15 @@ select option:checked {
 
 .team-item{
     background-color: darkgrey;
+    width: 20rem;
+    height: 23rem;
     text-align: center;
     margin: 10px;
     padding: 30px;
     border-radius: 50px 8px;
     -webkit-transition: all 0.25s ease-in-out;
     transition: all 0.25s ease-in-out;
+    text-wrap: wrap;
 }
 
 
@@ -531,8 +662,7 @@ select option:checked {
 }
 
 .team-item:hover{
-    background: darkslategray;
-    color: white;
+    background: var(--glow-color);
 }
 
 .team-item h3{
