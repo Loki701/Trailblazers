@@ -53,7 +53,7 @@ const LandingPage = () => {
     navigate('/algorithms');
   };
 
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     const value = event.target.value;
     const name = event.target.name;
     if (name === "algo") {
@@ -65,6 +65,16 @@ const LandingPage = () => {
       setPaceSelector(value);
       // handleDropdownSelection( 'pace', value);
     } else if (name === "maze") {
+      if (value === "0") {
+        //Delete all walls
+      }
+      try {
+        const mazeData = await axios.get(`http://localhost:8080/maze/presets/${value}`);
+
+      }catch (err) {
+        console.log("error fetching maze", err);
+      }
+
       setMazeSelector(value);
       // handleDropdownSelection( 'maze', value);
     }
@@ -229,6 +239,7 @@ const LandingPage = () => {
 
 
 
+
   const handleRun = async () => {
     setIsRunning(!isRunning);
     if (isRunning) {
@@ -332,7 +343,7 @@ const LandingPage = () => {
           <option value="Pace">Pace</option>
           <option value={2}>Slow</option>
           <option value={1}>Normal</option>
-          <option value={.5} >Fast</option>
+          <option value={.2} >Fast</option>
         </select>
 
         <select
@@ -343,13 +354,14 @@ const LandingPage = () => {
           required
         >
           <option value="Maze Type">Maze Type</option>
-          <option value="None">None</option>
-          {/* <option value="Recursive">Recursive</option>
-          <option value="Simplex">Simplex</option> */}
+          <option value="0">None</option>
+          <option value="1">Maze 1</option>
+          <option value="2">Maze 2</option>
+          <option value="3">Maze 3</option>
         </select>
       </div>
       <div className="main-container">
-        <>
+        <div className="main-content-container">
         <div className="grid">
           {grid.map((row, rowIndex) => (
             <div key={rowIndex} className="row">
@@ -371,16 +383,12 @@ const LandingPage = () => {
 
         </div>
         <div className="info-container">
-          <p>Time: </p>
-          {runTime}
-          <p> ns</p>
+          <p>Time: {runTime} ns</p>
         </div>
         <div className="info-container">
-          <p>Path Length: </p>
-          {runTime}
-          <p> tiles</p>
+          <p>Path Length: {pathLength} tiles</p>
         </div>
-        </>
+        </div>
         <div className="card">
           <h1>{text}</h1>
           <p>

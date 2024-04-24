@@ -13,6 +13,16 @@
     --card-border-color: rgba(255, 255, 255, 0.1);
 }
 
+.main-content-container{
+    display: flex;
+    flex-direction: column;
+    color: white;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
 
 /* Explore Algorithm Page */
 
