@@ -293,15 +293,15 @@ public class AlgorithmService {
                 break;
 
             for (Edge edge : edges) {
+                if (edge.dest == finish){
+                    continue;
+                }
                 if (edge.src.equals(current)) {
                     int newDist = dist.get(current) + edge.weight;
                     if (newDist < dist.get(edge.dest)) {
                         dist.put(edge.dest, newDist);
                         parent.put(edge.dest, current);
                         pq.offer(edge.dest);
-                        if (edge.dest == finish){
-                            continue;
-                        }
                         visited.add(edge.dest); // Add the visited node
                     }
                 }
