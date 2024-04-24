@@ -373,7 +373,7 @@ const LandingPage = () => {
         <div className="info-container">
           <p>Time: </p>
           {runTime}
-          <p> s</p>
+          <p> ns</p>
         </div>
         <div className="info-container">
           <p>Path Length: </p>
