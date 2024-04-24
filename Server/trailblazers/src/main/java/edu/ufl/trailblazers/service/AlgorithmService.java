@@ -405,20 +405,19 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, Visited);
     }
-}
+    static Queue<Coords> revQueue(Queue<Coords> q)
+    {
+        // Base case
+        if (q.isEmpty())
+            return q;
+        // Dequeue current item (from front)
+        Coords data = q.peek();
+        q.remove();
+        // Reverse remaining queue
+        q = revQueue(q);
+        // Enqueue current item (to rear)
+        q.add(data);
 
-static Queue<Coords> revQueue(Queue<Coords> q)
-{
-    // Base case
-    if (q.isEmpty())
         return q;
-    // Dequeue current item (from front)
-    Coords data = q.peek();
-    q.remove();
-    // Reverse remaining queue
-    q = revQueue(q);
-    // Enqueue current item (to rear)
-    q.add(data);
-
-    return q;
+    }
 }
