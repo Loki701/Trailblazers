@@ -342,11 +342,11 @@ public class AlgorithmService {
     }
     //overide of comparator to find difference in total cost between A* nodes
     static Comparator<AStarNode> comparator = new Comparator<AStarNode>() {
-            @Override
-            public int compare(AStarNode n1, AStarNode n2) {
-                return n1.f - n2.f;
-            }
-        };
+        @Override
+        public int compare(AStarNode n1, AStarNode n2) {
+            return n1.f - n2.f;
+        }
+    };
     public static AlgorithmResult runAStar(int[][] maze, Coords start, Coords finish) {
         AStarNode startNode = new AStarNode(new int[]{start.row(), start.col()}, null);
         AStarNode endNode = new AStarNode(new int[]{finish.row(), finish.col()}, null);
