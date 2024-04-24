@@ -289,19 +289,16 @@ public class AlgorithmService {
 
         while (!pq.isEmpty()) {
             Coords current = pq.poll();
-            if (current.equals(finish))
+            if (current.row() == finish.row() && current.col() == finish.col())
                 break;
-
             for (Edge edge : edges) {
+
                 if (edge.src.equals(current)) {
                     int newDist = dist.get(current) + edge.weight;
                     if (newDist < dist.get(edge.dest)) {
                         dist.put(edge.dest, newDist);
                         parent.put(edge.dest, current);
                         pq.offer(edge.dest);
-                        if (edge.dest == finish){
-                            continue;
-                        }
                         visited.add(edge.dest); // Add the visited node
                     }
                 }
@@ -341,11 +338,11 @@ public class AlgorithmService {
     }
     //overide of comparator to find difference in total cost between A* nodes
     static Comparator<AStarNode> comparator = new Comparator<AStarNode>() {
-            @Override
-            public int compare(AStarNode n1, AStarNode n2) {
-                return n1.f - n2.f;
-            }
-        };
+        @Override
+        public int compare(AStarNode n1, AStarNode n2) {
+            return n1.f - n2.f;
+        }
+    };
     public static AlgorithmResult runAStar(int[][] maze, Coords start, Coords finish) {
         AStarNode startNode = new AStarNode(new int[]{start.row(), start.col()}, null);
         AStarNode endNode = new AStarNode(new int[]{finish.row(), finish.col()}, null);
@@ -404,20 +401,19 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, Visited);
     }
-}
+    static Queue<Coords> revQueue(Queue<Coords> q)
+    {
+        // Base case
+        if (q.isEmpty())
+            return q;
+        // Dequeue current item (from front)
+        Coords data = q.peek();
+        q.remove();
+        // Reverse remaining queue
+        q = revQueue(q);
+        // Enqueue current item (to rear)
+        q.add(data);
 
-static Queue<Coords> revQueue(Queue<Coords> q)
-{
-    // Base case
-    if (q.isEmpty())
         return q;
-    // Dequeue current item (from front)
-    Coords data = q.peek();
-    q.remove();
-    // Reverse remaining queue
-    q = revQueue(q);
-    // Enqueue current item (to rear)
-    q.add(data);
-
-    return q;
+    }
 }
