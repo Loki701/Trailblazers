@@ -299,6 +299,9 @@ public class AlgorithmService {
                         dist.put(edge.dest, newDist);
                         parent.put(edge.dest, current);
                         pq.offer(edge.dest);
+                        if (edge.dest.col() == finish.col() && edge.dest.row() == finish.row()){
+                            continue;
+                        }
                         visited.add(edge.dest); // Add the visited node
                     }
                 }
@@ -317,6 +320,7 @@ public class AlgorithmService {
         }
 
         long executionTime = System.nanoTime() - startTime;
+
         return new AlgorithmResult(true, executionTime, shortestPath, visited);
     }
 
