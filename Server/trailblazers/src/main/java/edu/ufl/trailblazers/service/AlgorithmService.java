@@ -289,14 +289,10 @@ public class AlgorithmService {
 
         while (!pq.isEmpty()) {
             Coords current = pq.poll();
-            if (current.equals(finish))
+            if (current.row() == finish.row() && current.col() == finish.col())
                 break;
-
             for (Edge edge : edges) {
-                if (edge.dest == finish){
-                    continue;
 
-                }
                 if (edge.src.equals(current)) {
                     int newDist = dist.get(current) + edge.weight;
                     if (newDist < dist.get(edge.dest)) {
