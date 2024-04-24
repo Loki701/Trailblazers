@@ -27,7 +27,7 @@
 /* Explore Algorithm Page */
 
 .site-wrap {
-    height: 100vh;  
+    height: 90vh;  
     display: grid;
     grid-template-columns: 280px 1fr;
     margin: 3rem 0;
@@ -79,20 +79,6 @@
     padding-bottom: 0.4rem;
   }
   
-  .note {
-    width: calc(100% - 6rem);
-    margin: 2rem;
-    background: #171c26;
-    border-radius: 10px;
-    padding: 1rem;
-  }
-  .note h3 {
-    font-size: 0.9rem;
-    margin: 0 0 0.4rem 0;
-  }
-  .note p {
-    color: #717783;
-  }
   
   .name {
     font-size: 1.3rem;
@@ -124,6 +110,7 @@
     border-top-left-radius: 2rem;
     background: #ebecee;
     margin-left: -2rem;
+    margin-right: 1.5rem;
     position: relative;
   }
   main > header {
@@ -133,6 +120,9 @@
   .algo-content {
     padding: 3rem;
     display: flex;
+    flex-direction: column;
+    height: 70vh;
+    overflow-y: auto;
   }
 
 
