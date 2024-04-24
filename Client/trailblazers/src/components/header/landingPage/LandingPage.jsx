@@ -41,11 +41,11 @@ const LandingPage = () => {
   const [info, setInfo] = useState("Welcome to the algorithm visualizer! This tool allows you to visualize the pathfinding and maze generation algorithms in action. To get started, select an algorithm, pace, and maze type from the dropdown menu and click the run button. You can also create walls by clicking and dragging on the grid. Enjoy!");
 
   const algoInfo = [
-    {name: "Dijkstra", info: "Dijkstra's algorithm is a pathfinding algorithm that finds the shortest path between two nodes in a graph. It works by iteratively selecting the node with the smallest distance from the start node and updating the distances of its neighbors. The algorithm continues until the end node is reached, at which point the shortest path is reconstructed by backtracking through the nodes."},
-    {name: "BFS", info: "Breadth-first search (BFS) is a graph traversal algorithm that explores all the neighboring nodes at the present depth before moving on to the nodes at the next depth. It is often used to find the shortest path between two nodes in an unweighted graph."},
-    {name: "DFS", info: "Depth-first search (DFS) is a graph traversal algorithm that explores as far as possible along each branch before backtracking. It is often used to explore all the nodes in a graph and can be modified to find the shortest path between two nodes."},
-    {name: "Bellman-Ford", info: "Bellman-Ford is a single-source shortest path algorithm that can handle negative edge weights. It works by iteratively relaxing the edges of the graph until the shortest paths are found. The algorithm detects negative cycles and returns an error if one is found."},
-    {name: "A-Star", info: "A* (pronounced 'A-star') is a pathfinding algorithm that uses a heuristic to guide its search. It is often used to find the shortest path between two nodes in a graph and is more efficient than Dijkstra's algorithm for this purpose. A* uses a priority queue to select the next node to explore based on the sum of the cost to reach the node and the heuristic estimate of the cost to reach the goal."},
+    { name: "Dijkstra", info: "Dijkstra's algorithm is a pathfinding algorithm that finds the shortest path between two nodes in a graph. It works by iteratively selecting the node with the smallest distance from the start node and updating the distances of its neighbors. The algorithm continues until the end node is reached, at which point the shortest path is reconstructed by backtracking through the nodes." },
+    { name: "BFS", info: "Breadth-first search (BFS) is a graph traversal algorithm that explores all the neighboring nodes at the present depth before moving on to the nodes at the next depth. It is often used to find the shortest path between two nodes in an unweighted graph." },
+    { name: "DFS", info: "Depth-first search (DFS) is a graph traversal algorithm that explores as far as possible along each branch before backtracking. It is often used to explore all the nodes in a graph and can be modified to find the shortest path between two nodes." },
+    { name: "Bellman-Ford", info: "Bellman-Ford is a single-source shortest path algorithm that can handle negative edge weights. It works by iteratively relaxing the edges of the graph until the shortest paths are found. The algorithm detects negative cycles and returns an error if one is found." },
+    { name: "A-Star", info: "A* (pronounced 'A-star') is a pathfinding algorithm that uses a heuristic to guide its search. It is often used to find the shortest path between two nodes in a graph and is more efficient than Dijkstra's algorithm for this purpose. A* uses a priority queue to select the next node to explore based on the sum of the cost to reach the node and the heuristic estimate of the cost to reach the goal." },
   ]
   const navigate = useNavigate();
 
@@ -70,17 +70,37 @@ const LandingPage = () => {
         const updatedGrid = grid.map(row =>
           row.map(node => ({
             ...node,
-            isVisited: false, // Reset isVisited flag
+            isWall: false,
+            distance: Infinity,
+            isVisited: false,
+            previousNode: null,
           }))
         );
         setGrid(updatedGrid);
         return
-      }
-      try {
-        const mazeData = await axios.get(`http://localhost:8080/maze/presets/${value}`);
+      } else {
+        try {
+          const mazeData = await axios.get(`http://localhost:8080/maze/presets/${value}`);
+          // MazeData is a 2D int array
 
-      }catch (err) {
-        console.log("error fetching maze", err);
+          const updatedGrid = grid.map((row, rowIndex) =>
+            row.map((node, colIndex) => {
+              return {
+                ...node,
+                isStart: mazeData.data[rowIndex][colIndex] === 2,
+                isEnd: mazeData.data[rowIndex][colIndex] === 3,
+                isWall: mazeData.data[rowIndex][colIndex] === 1,
+                distance: Infinity,
+                isVisited: false,
+                previousNode: null,
+              };
+            })
+          );
+          setGrid(updatedGrid);
+
+        } catch (err) {
+          console.log("error fetching maze", err);
+        }
       }
 
       setMazeSelector(value);
@@ -309,7 +329,7 @@ const LandingPage = () => {
       setRunTime(shortestPathResponse.data.executionTimeNano);
       const visitedPath = shortestPathResponse.data.visitOrder;
 
-      
+
       const shortestPath = shortestPathResponse.data.shortestPath;
       setPathLength(shortestPath.length - 1);
 
@@ -370,58 +390,58 @@ const LandingPage = () => {
       </div>
       <div className="main-container">
         <div className="main-content-container">
-        <div className="grid">
-          {grid.map((row, rowIndex) => (
-            <div key={rowIndex} className="row">
-              {row.map((node, colIndex) => (
-                <div
-                  key={colIndex}
-                  className={`node 
+          <div className="grid">
+            {grid.map((row, rowIndex) => (
+              <div key={rowIndex} className="row">
+                {row.map((node, colIndex) => (
+                  <div
+                    key={colIndex}
+                    className={`node 
                   ${node.isWall ? "wall" : ""} 
                   ${node.isVisited ? (node.isShortestPath ? "shortest-path" : "visited") : ""}
                   ${node.isEnd ? "end" : ""} 
                   ${node.isStart ? "start" : ""} 
                   `}
-                  onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
-                  onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
-                ></div>
-              ))}
-            </div>
-          ))}
+                    onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                  ></div>
+                ))}
+              </div>
+            ))}
 
-        </div>
-        <div className="info-container">
-          <p>Time: {runTime} ns</p>
-        </div>
-        <div className="info-container">
-          <p>Path Length: {pathLength} tiles</p>
-        </div>
+          </div>
+          <div className="info-container">
+            <p>Time: {runTime} ns</p>
+          </div>
+          <div className="info-container">
+            <p>Path Length: {pathLength} tiles</p>
+          </div>
         </div>
         <div className="card">
           <h1>{text}</h1>
           <p>
             {info}
           </p>
-          {text !=  "Algorithm Visualizer"?
-          (
-            <button  
-            className="learn-more-btn" 
-            onClick={handleLearnMoreClick}
-           >Learn More</button>
-          ):(
-            <></>
-          )
-        }
+          {text != "Algorithm Visualizer" ?
+            (
+              <button
+                className="learn-more-btn"
+                onClick={handleLearnMoreClick}
+              >Learn More</button>
+            ) : (
+              <></>
+            )
+          }
         </div>
       </div>
       <button className="glowing-btn" onClick={handleRun}>
         {isRunning ? (
-        <span className="glowing-txt ">
-          CL<span className="faulty-letter">E</span>A<span className="faulty-letter">R</span>{" "}
-        </span>) : (
-        <span className="glowing-txt">
-          R<span className="faulty-letter">U</span>N{" "}
-        </span>)}
+          <span className="glowing-txt ">
+            CL<span className="faulty-letter">E</span>A<span className="faulty-letter">R</span>{" "}
+          </span>) : (
+          <span className="glowing-txt">
+            R<span className="faulty-letter">U</span>N{" "}
+          </span>)}
       </button>
     </div>
   );
