@@ -299,6 +299,9 @@ public class AlgorithmService {
                         dist.put(edge.dest, newDist);
                         parent.put(edge.dest, current);
                         pq.offer(edge.dest);
+                        if (edge.dest == finish){
+                            continue;
+                        }
                         visited.add(edge.dest); // Add the visited node
                     }
                 }
