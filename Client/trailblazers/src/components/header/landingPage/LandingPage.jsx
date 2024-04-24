@@ -67,6 +67,14 @@ const LandingPage = () => {
     } else if (name === "maze") {
       if (value === "0") {
         //Delete all walls
+        const updatedGrid = grid.map(row =>
+          row.map(node => ({
+            ...node,
+            isVisited: false, // Reset isVisited flag
+          }))
+        );
+        setGrid(updatedGrid);
+        return
       }
       try {
         const mazeData = await axios.get(`http://localhost:8080/maze/presets/${value}`);
@@ -301,9 +309,9 @@ const LandingPage = () => {
       setRunTime(shortestPathResponse.data.executionTimeNano);
       const visitedPath = shortestPathResponse.data.visitOrder;
 
-      setPathLength(visitedPath.length - 1);
-
+      
       const shortestPath = shortestPathResponse.data.shortestPath;
+      setPathLength(shortestPath.length - 1);
 
       console.log(shortestPathResponse);
       await displayVisitedNodes(visitedPath, false);
