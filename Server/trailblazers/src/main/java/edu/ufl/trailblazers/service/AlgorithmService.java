@@ -364,6 +364,7 @@ public class AlgorithmService {
                     shortestPath.add(new Coords(current.position[0], current.position[1]));
                     current = current.parent;
                 }
+                Collections.reverse(shortestPath);
                 long executionTime = System.nanoTime() - startTime;
                 return new AlgorithmResult(true, executionTime, shortestPath, Visited);
             }
