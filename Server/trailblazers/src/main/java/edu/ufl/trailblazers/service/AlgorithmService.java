@@ -295,6 +295,7 @@ public class AlgorithmService {
             for (Edge edge : edges) {
                 if (edge.dest == finish){
                     continue;
+
                 }
                 if (edge.src.equals(current)) {
                     int newDist = dist.get(current) + edge.weight;
