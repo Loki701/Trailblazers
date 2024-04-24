@@ -28,6 +28,8 @@ const createGrid = () => {
 };
 
 const LandingPage = () => {
+  const [pathLength, setPathLength] = useState(0);
+  const [runTime, setRunTime] = useState(0);
   const [grid, setGrid] = useState(createGrid());
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [currentNodeState, setCurrentNodeState] = useState(null);
@@ -231,6 +233,8 @@ const LandingPage = () => {
     setIsRunning(!isRunning);
     if (isRunning) {
       await clearVisitedBlocks();
+      setPathLength(0);
+      setRunTime(0);
       return;
     }
     if (
@@ -283,7 +287,10 @@ const LandingPage = () => {
         alert("No path found!");
         return;
       }
+      setRunTime(shortestPathResponse.data.executionTimeNano);
       const visitedPath = shortestPathResponse.data.visitOrder;
+
+      setPathLength(visitedPath.length - 1);
 
       const shortestPath = shortestPathResponse.data.shortestPath;
 
@@ -342,6 +349,7 @@ const LandingPage = () => {
         </select>
       </div>
       <div className="main-container">
+        <>
         <div className="grid">
           {grid.map((row, rowIndex) => (
             <div key={rowIndex} className="row">
@@ -360,7 +368,19 @@ const LandingPage = () => {
               ))}
             </div>
           ))}
+
         </div>
+        <div className="info-container">
+          <p>Time: </p>
+          {runTime}
+          <p> ns</p>
+        </div>
+        <div className="info-container">
+          <p>Path Length: </p>
+          {runTime}
+          <p> tiles</p>
+        </div>
+        </>
         <div className="card">
           <h1>{text}</h1>
           <p>
