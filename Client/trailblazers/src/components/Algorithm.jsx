@@ -1,98 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const Algorithm = () => {
-    const [loaded, setLoaded] = useState(false);
+  // State to track the active nav item
+  const [activeNav, setActiveNav] = useState('Dijkstra'); // Default active nav item
 
-    useEffect(() => {
-        setLoaded(true);
-    }, []);
-    const styles = {
-        page: {
-            fontFamily: 'Arial, sans-serif',
-            padding: '20px',
-            backgroundColor: 'black',
-            opacity: loaded ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
-            animationName: 'fadeIn',
-            animationDuration: '2s'
-        },
-        title: {
-            color: 'white',
-            textAlign: 'center',
-        },
-        section: {
-            backgroundColor: 'black',
-            borderRadius: '5px',
-            padding: '20px',
-            marginBottom: '20px',
-        },
-        sectionTitle: {
-            color: 'white',
-        },
-        sectionContent: {
-            color: 'white',
-        },
-        algorithm: {
-            backgroundColor: 'black',
-            borderRadius: '5px',
-            padding: '20px',
-            marginBottom: '20px',
-            outline: '2px solid white', // Add white outline
-        },
-        algorithmTitle: {
-            color: 'white',
-        },
-        algorithmContent: {
-            color: 'white',
-        },
-    };
+  // Content for each algorithm
+  const getAlgorithmContent = (algorithm) => {
+    switch (algorithm) {
+      case 'Dijkstra':
+        return "Dijkstra's algorithm  is an algorithm for finding the shortest paths between nodes in a weighted graph, which may represent, for example, road networks. It was conceived by computer scientist Edsger W. Dijkstra in 1956 and published three years later. The algorithm exists in many variants. Dijkstra's original algorithm found the shortest path between two given nodes,[6] but a more common variant fixes a single node as the 'source' node and finds shortest paths from the source to all other nodes in the graph, producing a shortest-path tree."
+      case 'DFS':
+        return "Depth-first search (DFS) is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking. Extra memory, usually a stack, is needed to keep track of the nodes discovered so far along a specified branch which helps in backtracking of the graph. A version of depth-first search was investigated in the 19th century by French mathematician Charles Pierre Trémaux as a strategy for solving mazes.";
+      case 'BFS':
+        return "Breadth-first search (BFS) is an algorithm for searching a tree data structure for a node that satisfies a given property. It starts at the tree root and explores all nodes at the present depth prior to moving on to the nodes at the next depth level. Extra memory, usually a queue, is needed to keep track of the child nodes that were encountered but not yet explored.";
+      case 'Bellman-Ford':
+        return 'Bellman-Ford algorithm finds shortest paths in graphs with negative weights.';
+      case 'A*':
+        return "A* (pronounced 'A-star') is a graph traversal and pathfinding algorithm, which is used in many fields of computer science due to its completeness, optimality, and optimal efficiency. Given a weighted graph, a source node and a goal node, the algorithm finds the shortest path (with respect to the given weights) from source to goal. One major practical drawback is its O (b^d)space complexity, as it stores all generated nodes in memory. Thus, in practical travel-routing systems, it is generally outperformed by algorithms that can pre-process the graph to attain better performance, as well as by memory-bounded approaches; however, A* is still the best solution in many cases. Peter Hart, Nils Nilsson and Bertram Raphael of Stanford Research Institute (now SRI International) first published the algorithm in 1968.[4] It can be seen as an extension of Dijkstra's algorithm. A* achieves better performance by using heuristics to guide its search. Compared to Dijkstra's algorithm, the A* algorithm only finds the shortest path from a specified source to a specified goal, and not the shortest-path tree from a specified source to all possible goals. This is a necessary trade-off for using a specific-goal-directed heuristic. For Dijkstra's algorithm, since the entire shortest-path tree is generated, every node is a goal, and there can be no specific-goal-directed heuristic.";
+      default:
+        return 'Information about algorithm';
+    }
+  };
 
-    return (
-        <div style={styles.page}>
-            <h1 style={styles.title}>Algorithms Explanations</h1>
+  return (
+    <div className="site-wrap">
+      <nav className="site-nav">
+        <ul>
+          <li className={activeNav === 'Dijkstra' ? 'active' : ''}>
+            <a href="#Dijkstra" onClick={() => setActiveNav('Dijkstra')}>Dijkstra</a>
+          </li>
+          <li className={activeNav === 'DFS' ? 'active' : ''}>
+            <a href="#DFS" onClick={() => setActiveNav('DFS')}>Depth First Search</a>
+          </li>
+          <li className={activeNav === 'BFS' ? 'active' : ''}>
+            <a href="#BFS" onClick={() => setActiveNav('BFS')}>Breadth First Search</a>
+          </li>
+          <li className={activeNav === 'Bellman-Ford' ? 'active' : ''}>
+            <a href="#Bellman-Ford" onClick={() => setActiveNav('Bellman-Ford')}>Bellman-Ford</a>
+          </li>
+          <li className={activeNav === 'A*' ? 'active' : ''}>
+            <a href="#A*" onClick={() => setActiveNav('A*')}>A*</a>
+          </li>
+        </ul>
+      </nav>
 
-            <div style={styles.section}>
-                <h2 style={styles.sectionTitle}>Pathfinding Algorithms</h2>
-                <p style={styles.sectionContent}>
-                    Pathfinding algorithms are used to determine the shortest path between two nodes in a graph. They are widely used in applications like GPS for finding the shortest route between two locations, in games for enabling characters to reach a certain goal, and in network routing to send packets via the shortest path.
-                </p>
-            </div>
+      <main>
+        <header>
+          <h1 className="title">{activeNav}</h1>
+        </header>
 
-            <div style={styles.algorithm}>
-                <h2 style={styles.algorithmTitle}>Dijkstra’s Algorithm</h2>
-                <p style={styles.algorithmContent}>
-                    Dijkstra's Algorithm is a graph search algorithm that solves the shortest-path problem for a graph with non-negative edge path costs, producing a shortest path tree.
-                </p>
-            </div>
-
-            <div style={styles.algorithm}>
-                <h2 style={styles.algorithmTitle}>Bellman-Ford Algorithm</h2>
-                <p style={styles.algorithmContent}>
-                    The Bellman-Ford algorithm is an algorithm that computes shortest paths from a single source vertex to all of the other vertices in a weighted digraph. It is slower than Dijkstra's algorithm for the same problem, but more versatile, as it is capable of handling graphs in which some of the edge weights are negative numbers.
-                </p>
-            </div>
-
-            <div style={styles.algorithm}>
-                <h2 style={styles.algorithmTitle}>Depth-First Search</h2>
-                <p style={styles.algorithmContent}>
-                    Depth-First Search (DFS) is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking.
-                </p>
-            </div>
-
-            <div style={styles.algorithm}>
-                <h2 style={styles.algorithmTitle}>Breadth-First Search</h2>
-                <p style={styles.algorithmContent}>
-                    Breadth-First Search (BFS) is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root (or some arbitrary node of a graph, sometimes referred to as a 'search key') and explores the neighbor nodes at the present depth prior to moving on to nodes at the next depth level.
-                </p>
-            </div>
-            <div style={styles.algorithm}>
-                <h2 style={styles.algorithmTitle}>A Star</h2>
-                <p style={styles.algorithmContent}>
-                A* (A Star) is a computer algorithm that is widely used in pathfinding and graph traversal, the process of plotting an efficiently directed path between multiple points, called nodes. It enjoys widespread use due to its performance and accuracy. The algorithm efficiently plots a walkable path between multiple nodes, or points, on the graph. At each step it picks the node according to a value-'f' which is a parameter equal to the sum of two other parameters – 'g' (the cost of the path from the start node) and 'h' (the heuristic estimate of the cost of the path to the goal).
-                </p>
-            </div>
+        <div className="algo-content">
+          <p>{getAlgorithmContent(activeNav)}</p>
         </div>
-    );
+      </main>
+    </div>
+  );
 };
 
 export default Algorithm;
