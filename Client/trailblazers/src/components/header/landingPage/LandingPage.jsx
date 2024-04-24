@@ -65,6 +65,7 @@ const LandingPage = () => {
       setPaceSelector(value);
       // handleDropdownSelection( 'pace', value);
     } else if (name === "maze") {
+      setIsRunning(false);
       if (value === "0") {
         //Delete all walls
         const updatedGrid = grid.map(row =>
