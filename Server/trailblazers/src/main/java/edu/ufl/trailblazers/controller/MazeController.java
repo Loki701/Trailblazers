@@ -2,6 +2,7 @@ package edu.ufl.trailblazers.controller;
 
 import edu.ufl.trailblazers.constants.DefaultMazeSize;
 import edu.ufl.trailblazers.model.Coords;
+import edu.ufl.trailblazers.model.MazeConfiguration;
 import edu.ufl.trailblazers.requests.PatchRequestBody;
 import edu.ufl.trailblazers.requests.PostRequestBody;
 import edu.ufl.trailblazers.requests.PutRequestBody;
@@ -58,6 +59,15 @@ public class MazeController {
     * - Once a maze is initialized, there is no way to change its size unless DELETE /maze is called and a new maze is
     *   initialized.
     */
+
+    @GetMapping("/presets/{presetId}")
+    public ResponseEntity<?> getPresetConfig(@PathVariable(name="presetId") int presetId) {
+        if (presetId < 1 || presetId > 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preset ID " + presetId + " does not exist.");
+        }
+        int[][] presetMaze = MazeConfiguration.getPresetBoard(presetId);
+        return ResponseEntity.status(HttpStatus.OK).body(presetMaze);
+    }
 
     @PostMapping() // Including a body with custom maze dimensions is for testing purposes.
     public ResponseEntity<?> initialize(@RequestBody(required = false) PostRequestBody body) {

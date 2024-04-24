@@ -341,7 +341,6 @@ public class AlgorithmService {
             }
         };
     public static AlgorithmResult runAStar(int[][] maze, Coords start, Coords finish) {
-        //throw new UnsupportedOperationException(); // TODO: Code A* algorithm.
         AStarNode startNode = new AStarNode(new int[]{start.row(), start.col()}, null);
         AStarNode endNode = new AStarNode(new int[]{finish.row(), finish.col()}, null);
         long startTime = System.nanoTime();
