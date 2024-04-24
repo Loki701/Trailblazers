@@ -260,6 +260,9 @@ public class AlgorithmService {
                 if (maze[i][j] == 1)
                     continue;
                 Coords src = new Coords(i, j);
+                if ( src == finish){
+                    continue;
+                }
                 visited.add(src); // Add all nodes to visited set
                 if (i - 1 >= 0 && maze[i - 1][j] != 1)
                     edges.add(new Edge(src, new Coords(i - 1, j), 1));
@@ -364,7 +367,7 @@ public class AlgorithmService {
                     shortestPath.add(new Coords(current.position[0], current.position[1]));
                     current = current.parent;
                 }
-                Collections.reverse(shortestPath);
+                shortestPath = revQueue(shortestPath);
                 long executionTime = System.nanoTime() - startTime;
                 return new AlgorithmResult(true, executionTime, shortestPath, Visited);
             }
@@ -398,4 +401,20 @@ public class AlgorithmService {
         long executionTime = System.nanoTime() - startTime;
         return new AlgorithmResult(false, executionTime, null, Visited);
     }
+}
+
+static Queue<Coords> revQueue(Queue<Coords> q)
+{
+    // Base case
+    if (q.isEmpty())
+        return q;
+    // Dequeue current item (from front)
+    Coords data = q.peek();
+    q.remove();
+    // Reverse remaining queue
+    q = revQueue(q);
+    // Enqueue current item (to rear)
+    q.add(data);
+
+    return q;
 }
